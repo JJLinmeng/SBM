@@ -2,6 +2,7 @@ package com.mumu.studentbankmanagement;
 
 import com.mumu.studentbankmanagement.frame.*;
 import com.mumu.studentbankmanagement.model.Stu;
+import org.apache.ibatis.javassist.compiler.ast.NewExpr;
 
 import javax.swing.*;
 
@@ -25,6 +26,7 @@ public class JFrameFactory {
             case "StuMainJFrame" ->new StuMainJFrame(closeWay,parentComponent).handle();
             case "StuPersonalCenterJFrame"-> new StuPersonalCenterJFrame(closeWay,parentComponent).handle();
             case "StuPasswordChangeJFrame"->new StuPasswordChangeJFrame(closeWay,parentComponent).handle();
+            case "BankLoginJFrame"-> new BankLoginJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

@@ -4,7 +4,9 @@ import com.mumu.studentbankmanagement.JFrameFactory;
 import com.mumu.studentbankmanagement.Loginer;
 import com.mumu.studentbankmanagement.Util.DateUtil;
 import com.mumu.studentbankmanagement.frame.*;
+import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.Stu;
+import com.mumu.studentbankmanagement.service.BankService;
 import com.mumu.studentbankmanagement.service.StuService;
 
 import javax.swing.*;
@@ -72,6 +74,26 @@ public class MouseClickFunction {
                 parent.getParentComponent().setVisible(false);
                 Loginer.user=user;
                 MouseClickFunction.openJFrame("StuMainJFrame",JFrame.EXIT_ON_CLOSE, parent);
+            } else {
+                //登录失败
+                JOptionPane.showMessageDialog(parent, "登录失败");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public static void checkIsLogin(BankLoginJFrame parent, BankService userService) {
+        String id = parent.getIdTextField().getText();
+        String password = new String(parent.getPasswordTextField().getPassword());
+        try {
+           CardOwner cardOwner = userService.login(id, password);
+            if (cardOwner != null) {
+                //登录成功
+                JOptionPane.showMessageDialog(parent, "登录成功");
+                parent.setVisible(false);
+                parent.getParentComponent().setVisible(false);
+                Loginer.cardOwner=cardOwner;
+//                MouseClickFunction.openJFrame("StuMainJFrame",JFrame.EXIT_ON_CLOSE, parent);
             } else {
                 //登录失败
                 JOptionPane.showMessageDialog(parent, "登录失败");

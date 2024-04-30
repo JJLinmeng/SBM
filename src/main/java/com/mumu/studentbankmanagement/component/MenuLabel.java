@@ -35,7 +35,12 @@ public class MenuLabel extends JLabel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                MouseClickFunction.openJFrame("StuLoginJFrame",JFrame.EXIT_ON_CLOSE,parentComponent);
+                if(text.equals("学生系统")){
+                    MouseClickFunction.openJFrame("StuLoginJFrame",JFrame.DISPOSE_ON_CLOSE,parentComponent);
+                }
+               else if(text.equals("银行系统")){
+                   MouseClickFunction.openJFrame("BankLoginJFrame",JFrame.DISPOSE_ON_CLOSE,parentComponent);
+                }
             }
         });
     }
