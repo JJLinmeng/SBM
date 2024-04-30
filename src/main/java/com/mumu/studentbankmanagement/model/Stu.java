@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class Stu {
     public static final int ADMIN = 1;
     public static final int STUDENT = 2;
+
     private String id; // 学号
     private String name; // 姓名
     private String password; // 密码

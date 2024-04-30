@@ -78,13 +78,14 @@ public class StuInfoListJFrame extends ConfigJFrame {
         if (way == ADD) {
             stuListModel.addElement(stu);
         } else if (way == DELETE) {
-
+            stuListModel.removeElement(stu);
         } else if (way == SEARCH) {
             stuListModel.clear();
             for (Stu stu1 : stuList) {
                 stuListModel.addElement(stu1);
             }
         } else if (way == UPDATE) {
+            stuListModel.removeElement(stu);
         }
     }
 
