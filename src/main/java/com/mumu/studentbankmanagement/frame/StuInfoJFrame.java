@@ -37,7 +37,7 @@ public class StuInfoJFrame extends ConfigJFrame{
         this.infoPanel.add(this.entryYearLabel=new JLabel("入学年份:"+this.stu.getEntryYear()));
         this.infoPanel.add(this.specialityLabel=new JLabel("专业:"+this.stu.getSpeciality()));
         this.infoPanel.add(this.birthdayLabel=new JLabel("出生日期:"+this.stu.getBirthday()));
-        this.infoPanel.add(this.provinceCityLabel=new JLabel("省份:"+this.stu.getProvince()+"城市:"+this.stu.getCity()));
+        this.infoPanel.add(this.provinceCityLabel=new JLabel("省份:"+this.stu.getProvince()+" 城市:"+this.stu.getCity()));
         this.infoPanel.add(this.roleLabel=new JLabel("角色:"+this.stu.getRole()));
         this.add(this.buttonPanel=new JPanel(),BorderLayout.SOUTH);
         this.buttonPanel.add(this.backButton=new JButton("返回"),BorderLayout.SOUTH);

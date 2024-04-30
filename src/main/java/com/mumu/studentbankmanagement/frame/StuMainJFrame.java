@@ -59,7 +59,7 @@ public class StuMainJFrame extends ConfigJFrame {
         this.personLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-
+                MouseClickFunction.openJFrame("StuPersonalCenterJFrame", JFrame.DISPOSE_ON_CLOSE, StuMainJFrame.this);
             }
         });
         this.logLabel.addMouseListener(new MouseAdapter() {

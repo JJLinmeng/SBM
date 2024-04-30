@@ -2,6 +2,7 @@ package com.mumu.studentbankmanagement.function;
 
 import com.mumu.studentbankmanagement.JFrameFactory;
 import com.mumu.studentbankmanagement.Loginer;
+import com.mumu.studentbankmanagement.Util.DateUtil;
 import com.mumu.studentbankmanagement.frame.*;
 import com.mumu.studentbankmanagement.model.Stu;
 import com.mumu.studentbankmanagement.service.StuService;
@@ -105,8 +106,6 @@ public class MouseClickFunction {
                 } else {
                     JOptionPane.showMessageDialog(deleteStuFrame, "已取消删除");
                 }
-
-
             }
         }
 
@@ -131,26 +130,47 @@ public class MouseClickFunction {
         JFrameFactory.create(frame,closeway, parent);
     }
 
-//    public static void updateStu(updateStuFrame updateStuFrame, StuService stuService, Stu stu) {
-//        String name = updateStuFrame.getNameTextField().getText();
-//        String password = new String(updateStuFrame.getPasswordField().getPassword());
-//        LocalDate birthday = updateStuFrame.getBirthdayDatePicker().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        String speciality = updateStuFrame.getSpecialityTextField().getText();
-//        int entryYear = Integer.parseInt(updateStuFrame.getEntryYearTextField().getText());
-//        String province = updateStuFrame.getProvinceCitySelector().getProvinceComboBox().getSelectedItem().toString();
-//        String city = updateStuFrame.getProvinceCitySelector().getCityComboBox().getSelectedItem().toString();
-//        stu.setName(name);
-//        stu.setPassword(password);
-//        stu.setBirthday(birthday);
-//        stu.setSpeciality(speciality);
-//        stu.setEntryYear(entryYear);
-//        stu.setProvince(province);
-//        stu.setCity(city);
-//        if (name.equals("") || password.equals("") || speciality.equals("")) {
-//            JOptionPane.showMessageDialog(updateStuFrame, "请将信息填写完整,名字,密码,专业,入学年份不能为空", "提示", JOptionPane.WARNING_MESSAGE);
-//        } else {
-//                stuService.updateStu(stu);
-//        }
-//    }
+    public static void updateStu(UpdateStuJFrame updateStuJFrame, StuService stuService,Stu stu) {
+        updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.DELETE,stu,null);
+        String name = updateStuJFrame.getNameTextField().getText();
+        String password = new String(updateStuJFrame.getPasswordTextField().getPassword());
+        LocalDate birthday = DateUtil.DateToLocalDate(updateStuJFrame.getBirthdayDatePicker().getDate());
+        String speciality = updateStuJFrame.getSpecialityTextField().getText();
+        int entryYear = Integer.parseInt(updateStuJFrame.getEntryYearTextField().getText());
+        String province=updateStuJFrame.getProvinceCitySelector().getProvinceComboBox().getSelectedItem().toString();
+        String city=updateStuJFrame.getProvinceCitySelector().getCityComboBox().getSelectedItem().toString();
+        stu.setName(name);
+        stu.setPassword(password);
+        stu.setBirthday(birthday);
+        stu.setSpeciality(speciality);
+        stu.setEntryYear(entryYear);
+        stu.setProvince(province);
+        stu.setCity(city);
+        stuService.updateStu(stu);
+        JOptionPane.showMessageDialog(updateStuJFrame, "修改成功");
+        MouseClickFunction.closeJFrame(updateStuJFrame);
+        updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.ADD,stu,null);
+    }
+
+    public static void modifyStuPassword(StuPasswordChangeJFrame stuPasswordChangeJFrame, StuService stuService) {
+        String oldPassword = new String(stuPasswordChangeJFrame.getOldPasswordField().getPassword());
+        String newPassword = new String(stuPasswordChangeJFrame.getNewPasswordField().getPassword());
+        String confirmPassword = new String(stuPasswordChangeJFrame.getConfirmPasswordField().getPassword());
+        if(!oldPassword.equals(Loginer.user.getPassword())){
+            JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "原密码错误", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+        else if(newPassword.equals(oldPassword)){
+            JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "新密码不能与原密码相同", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+        else if(!newPassword.equals(confirmPassword)){
+            JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            Loginer.user.setPassword(newPassword);
+            stuService.updateStu(Loginer.user);
+            JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "修改成功");
+            MouseClickFunction.closeJFrame(stuPasswordChangeJFrame);
+        }
+    }
 }
 

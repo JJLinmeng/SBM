@@ -14,5 +14,11 @@ public class DateUtil {
         Date date = Date.from(instant);
         return date;
     }
+    public static LocalDate DateToLocalDate(Date date){
+        Instant instant = date.toInstant();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        LocalDate localDate = localDateTime.toLocalDate();
+        return localDate;
+    }
 
 }

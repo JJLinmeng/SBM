@@ -24,6 +24,7 @@ public class JFrameFactory {
             case "StuLoginJFrame" ->new StuLoginJFrame(closeWay,parentComponent).handle();
             case "StuMainJFrame" ->new StuMainJFrame(closeWay,parentComponent).handle();
             case "StuPersonalCenterJFrame"-> new StuPersonalCenterJFrame(closeWay,parentComponent).handle();
+            case "StuPasswordChangeJFrame"->new StuPasswordChangeJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }
