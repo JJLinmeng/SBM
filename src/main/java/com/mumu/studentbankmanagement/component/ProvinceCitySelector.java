@@ -22,7 +22,11 @@ public class ProvinceCitySelector extends JPanel {
     private JLabel cityLabel;
     @Getter
     private JComboBox<String> cityComboBox;
-
+    public ProvinceCitySelector(String province,String city) {
+        this();
+        provinceComboBox.setSelectedItem(province);
+        cityComboBox.setSelectedItem(city);
+    }
     public ProvinceCitySelector() {
 
         setLayout(new GridBagLayout());
