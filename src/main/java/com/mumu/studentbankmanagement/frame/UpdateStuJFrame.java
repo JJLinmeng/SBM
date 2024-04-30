@@ -1,5 +1,6 @@
 package com.mumu.studentbankmanagement.frame;
 
+import com.mumu.studentbankmanagement.component.GridBagPanel;
 import com.mumu.studentbankmanagement.component.ProvinceCitySelector;
 import com.mumu.studentbankmanagement.model.Stu;
 import org.jdesktop.swingx.JXDatePicker;
@@ -7,6 +8,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import javax.swing.*;
 
 public class UpdateStuJFrame extends ConfigJFrame{
+    private GridBagPanel gridBagPanel;
     private Stu stu;
     private JLabel idLabel;
     private JTextField idTextField;
@@ -37,7 +39,11 @@ public class UpdateStuJFrame extends ConfigJFrame{
             JOptionPane.showMessageDialog(this,"未选择学生");
             return;
         }
-
+        this.add(gridBagPanel=new GridBagPanel());
+        gridBagPanel.add(0,0,0.2,idLabel=new JLabel("学号:"));
+        gridBagPanel.add(1,0,1,idTextField=new JTextField(stu.getId()));
+        gridBagPanel.add(0,1,0.2,nameLabel=new JLabel("姓名:"));
+        gridBagPanel.add(1,1,1,nameTextField=new JTextField(stu.getName()));
     }
 
 }
