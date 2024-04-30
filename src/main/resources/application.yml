@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/studentbank
+    username: root
+    password: 810327
+    type: com.alibaba.druid.pool.DruidDataSource
+
+
+#  servlet:
+#    multipart:
+#      location: d:/images
+
+
+mybatis:
+  type-aliases-package: com.mumu.studentbankmanagement.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    root: info
+
+

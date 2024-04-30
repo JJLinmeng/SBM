@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mumu.studentbankmanagement.mapper.StuMapper">
+    <insert id="addStu" >
+        INSERT INTO stu (id,name,password,birthday,speciality,province,city,entry_year,role) VALUES (#{id}, #{name}, #{password},#{birthday},#{speciality},#{province},#{city},#{entryYear},#{role})
+    </insert>
+    <update id="updateStu">
+        UPDATE stu SET name = #{name},password = #{password},birthday = #{birthday},speciality = #{speciality},province = #{province},city = #{city},entry_year = #{entryYear} WHERE id = #{id}
+    </update>
+    <delete id="deleteStu">
+        DELETE FROM stu WHERE id = #{id}
+    </delete>
+    <select id="findByIdAndPassword" resultType="Stu">
+        SELECT * FROM stu WHERE id = #{id} AND password=#{password}
+    </select>
+    <select id="checkIsExist" resultType="Stu">
+        SELECT role FROM stu WHERE id = #{id};
+    </select>
+    <select id="getAllStudent" resultType="Stu">
+        SELECT * FROM stu
+    </select>
+    <select id="selectStuByCondition" resultType="Stu">
+        SELECT * FROM stu
+        <where>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="id != null and id != ''">
+                AND id = #{id}
+            </if>
+            <if test="entryYear != null and entryYear != 0" >
+                AND entry_year = #{entryYear}
+            </if>
+        </where>
+    </select>
+</mapper>
