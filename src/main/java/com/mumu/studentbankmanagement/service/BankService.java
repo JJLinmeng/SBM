@@ -1,9 +1,14 @@
 package com.mumu.studentbankmanagement.service;
 
 import com.mumu.studentbankmanagement.model.CardOwner;
+import com.mumu.studentbankmanagement.model.DebitCard;
 
 public interface BankService {
     CardOwner login(String stuId, String stuPwd);
 
     int registerCardOwner(CardOwner cardOwner);
+
+    int getCardNumber(String id);
+
+    DebitCard[] getCards(String id);
 }

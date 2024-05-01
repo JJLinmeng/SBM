@@ -7,4 +7,10 @@
     <select id="login" resultType="CardOwner">
         SELECT * FROM card_owner WHERE id = #{id} AND password = #{password}
     </select>
+    <select id="getCardNumber" resultType="java.lang.Integer">
+        SELECT count(*) FROM debit_card WHERE owner_id = #{id}
+    </select>
+    <select id="getCards">
+        SELECT * FROM debit_card WHERE owner_id = #{id}
+    </select>
 </mapper>

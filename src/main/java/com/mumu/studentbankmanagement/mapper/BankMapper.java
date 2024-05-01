@@ -1,6 +1,7 @@
 package com.mumu.studentbankmanagement.mapper;
 
 import com.mumu.studentbankmanagement.model.CardOwner;
+import com.mumu.studentbankmanagement.model.DebitCard;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.jmx.export.annotation.ManagedNotification;
 import org.springframework.stereotype.Repository;
@@ -11,4 +12,8 @@ public interface BankMapper {
     CardOwner login(String id, String password);
 
     int registerCardOwner(CardOwner cardOwner);
+
+    int getCardNumber(String id);
+
+    DebitCard[] getCards(String id);
 }

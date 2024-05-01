@@ -2,6 +2,7 @@ package com.mumu.studentbankmanagement;
 
 import com.mumu.studentbankmanagement.frame.*;
 import com.mumu.studentbankmanagement.model.Stu;
+import org.apache.ibatis.annotations.Case;
 import org.apache.ibatis.javassist.compiler.ast.NewExpr;
 
 import javax.swing.*;
@@ -29,6 +30,8 @@ public class JFrameFactory {
             case "BankLoginJFrame"-> new BankLoginJFrame(closeWay,parentComponent).handle();
             case "BankRegisterJFrame" ->new BankRegisterJFrame(closeWay,parentComponent).handle();
             case "CardOwnerJFrame" ->new CardOwnerJFrame(closeWay,parentComponent).handle();
+            case "CardOwnerInfoJFrame" ->new CardOwnerInfoJFrame(closeWay,parentComponent).handle();
+            case "CardsJFrame" -> new CardsJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

@@ -4,6 +4,7 @@ import com.mumu.studentbankmanagement.frame.ConfigJFrame;
 import com.mumu.studentbankmanagement.mapper.BankMapper;
 import com.mumu.studentbankmanagement.mapper.StuMapper;
 import com.mumu.studentbankmanagement.model.CardOwner;
+import com.mumu.studentbankmanagement.model.DebitCard;
 import com.mumu.studentbankmanagement.service.BankService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,15 @@ public class bankServiceImpl implements BankService {
     @Override
     public int registerCardOwner(CardOwner cardOwner) {
         return bankMapper.registerCardOwner(cardOwner);
+    }
+
+    @Override
+    public int getCardNumber(String id) {
+        return bankMapper.getCardNumber(id);
+    }
+
+    @Override
+    public DebitCard[] getCards(String id) {
+        return bankMapper.getCards(id);
     }
 }
