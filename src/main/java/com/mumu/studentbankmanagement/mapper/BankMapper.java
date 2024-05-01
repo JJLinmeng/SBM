@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BankMapper {
     CardOwner login(String id, String password);
+
+    int registerCardOwner(CardOwner cardOwner);
 }

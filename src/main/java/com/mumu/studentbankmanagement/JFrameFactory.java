@@ -28,6 +28,7 @@ public class JFrameFactory {
             case "StuPasswordChangeJFrame"->new StuPasswordChangeJFrame(closeWay,parentComponent).handle();
             case "BankLoginJFrame"-> new BankLoginJFrame(closeWay,parentComponent).handle();
             case "BankRegisterJFrame" ->new BankRegisterJFrame(closeWay,parentComponent).handle();
+            case "CardOwnerJFrame" ->new CardOwnerJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

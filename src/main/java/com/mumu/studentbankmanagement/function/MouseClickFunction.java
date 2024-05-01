@@ -93,7 +93,7 @@ public class MouseClickFunction {
                 parent.setVisible(false);
                 parent.getParentComponent().setVisible(false);
                 Loginer.cardOwner=cardOwner;
-//                MouseClickFunction.openJFrame("StuMainJFrame",JFrame.EXIT_ON_CLOSE, parent);
+                MouseClickFunction.openJFrame("CardOwnerJFrame",JFrame.EXIT_ON_CLOSE, parent);
             } else {
                 //登录失败
                 JOptionPane.showMessageDialog(parent, "登录失败");
@@ -196,5 +196,29 @@ public class MouseClickFunction {
     }
 
 
+    public static void registerCardOwner(BankRegisterJFrame bankRegisterJFrame, BankService bankService) {
+        String id=bankRegisterJFrame.getIdTextField().getText();
+        String password=new String(bankRegisterJFrame.getPasswordField().getPassword());
+        String name=bankRegisterJFrame.getNameTextField().getText();
+        String confirmPassword=new String(bankRegisterJFrame.getPasswordConfirmField().getPassword());
+        if(!password.equals(confirmPassword)){
+            JOptionPane.showMessageDialog(bankRegisterJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
+        }else if (id.equals("")) {
+            JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入身份证号", "提示", JOptionPane.WARNING_MESSAGE);
+        } else if(name.equals("")){
+            JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入姓名", "提示", JOptionPane.WARNING_MESSAGE);
+        }else{
+            CardOwner cardOwner=new CardOwner(id,name,password);
+            int result = bankService.registerCardOwner(cardOwner);
+            if(result>0){
+                JOptionPane.showMessageDialog(bankRegisterJFrame, "注册成功");
+                MouseClickFunction.closeJFrame(bankRegisterJFrame);
+            }else{
+                JOptionPane.showMessageDialog(bankRegisterJFrame, "注册失败", "提示", JOptionPane.WARNING_MESSAGE);
+            }
+    }{
+
+        }
+    }
 }
 

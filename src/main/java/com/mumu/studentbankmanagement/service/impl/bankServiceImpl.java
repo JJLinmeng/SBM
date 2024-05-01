@@ -20,4 +20,9 @@ public class bankServiceImpl implements BankService {
     public CardOwner login(String Id, String Pwd) {
         return bankMapper.login(Id, Pwd);
     }
+
+    @Override
+    public int registerCardOwner(CardOwner cardOwner) {
+        return bankMapper.registerCardOwner(cardOwner);
+    }
 }
