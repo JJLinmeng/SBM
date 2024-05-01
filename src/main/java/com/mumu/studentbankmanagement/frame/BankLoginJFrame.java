@@ -42,5 +42,6 @@ public class BankLoginJFrame extends ConfigJFrame {
         this.buttonPanel.add(this.registerButton=new JButton("注册"));
         this.closeButton.addActionListener(e -> MouseClickFunction.closeJFrame(this));
         this.loginButton.addActionListener(e -> MouseClickFunction.checkIsLogin(this, bankService));
+        this.registerButton.addActionListener(e->MouseClickFunction.openJFrame("BankRegisterJFrame",JFrame.DISPOSE_ON_CLOSE,this));
     }
 }
