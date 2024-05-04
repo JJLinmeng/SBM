@@ -21,6 +21,7 @@ public class StuPersonalCenterJFrame extends ConfigJFrame{
     private JLabel birthdayLabel;
     private JLabel provinceCityLabel;
     private JLabel roleLabel;
+    private JButton toolsButton;
     private JButton backButton;
 
     public StuPersonalCenterJFrame(int closeWay, JFrame parentComponent) {
@@ -41,6 +42,8 @@ public class StuPersonalCenterJFrame extends ConfigJFrame{
         this.add(this.buttonPanel=new JPanel(),BorderLayout.SOUTH);
         this.buttonPanel.add(this.passwordChangeButton=new JButton("修改密码"));
         this.passwordChangeButton.addActionListener(e-> MouseClickFunction.openJFrame("StuPasswordChangeJFrame",JFrame.DISPOSE_ON_CLOSE,this));
+        this.buttonPanel.add(this.toolsButton=new JButton("工具箱"),BorderLayout.EAST);
+        this.toolsButton.addActionListener(e-> MouseClickFunction.openJFrame("StuToolsJFrame",JFrame.DISPOSE_ON_CLOSE,this));
         this.buttonPanel.add(this.backButton=new JButton("返回"),BorderLayout.SOUTH);
         this.backButton.addActionListener(e-> MouseClickFunction.closeJFrame(this));
     }

@@ -220,5 +220,15 @@ public class MouseClickFunction {
 
         }
     }
+
+    public static void picToPdf(PicToPdfJFrame parent) {
+        if(parent.getDestFileTextField().getText().equals("")||parent.getSourceFileTextField().getText().equals("")||parent.getDestFileTextField().getText().equals("")){
+            JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
+        }else{
+            String destFilePath=parent.getDestFileTextField().getText()+"/"+parent.getDestFileTextField().getText()+".pdf";
+            String sourceFilePath=parent.getSourceFileTextField().getText();
+
+        }
+    }
 }
 

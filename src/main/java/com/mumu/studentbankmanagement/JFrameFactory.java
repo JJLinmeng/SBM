@@ -32,6 +32,8 @@ public class JFrameFactory {
             case "CardOwnerJFrame" ->new CardOwnerJFrame(closeWay,parentComponent).handle();
             case "CardOwnerInfoJFrame" ->new CardOwnerInfoJFrame(closeWay,parentComponent).handle();
             case "CardsJFrame" -> new CardsJFrame(closeWay,parentComponent).handle();
+            case "StuToolsJFrame" -> new StuToolsJFrame(closeWay,parentComponent).handle();
+            case "PicToPdfJFrame" -> new PicToPdfJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }
