@@ -36,4 +36,19 @@ public class bankServiceImpl implements BankService {
     public DebitCard[] getCards(String id) {
         return bankMapper.getCards(id);
     }
+
+    @Override
+    public String getCardOwnerByCardNumber(String cardNumber) {
+        return bankMapper.getCardOwnerByCardNumber(cardNumber);
+    }
+
+    @Override
+    public String getCardPassword(String cardNumber) {
+        return bankMapper.getCardPassword(cardNumber);
+    }
+
+    @Override
+    public void deposit(String cardNumber, String amount) {
+        bankMapper.deposit(cardNumber, amount);
+    }
 }

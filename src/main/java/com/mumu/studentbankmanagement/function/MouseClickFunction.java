@@ -16,7 +16,6 @@ import com.mumu.studentbankmanagement.service.StuService;
 import com.itextpdf.text.Image;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -215,9 +214,9 @@ public class MouseClickFunction {
         String confirmPassword = new String(bankRegisterJFrame.getPasswordConfirmField().getPassword());
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
-        } else if (id.equals("")) {
+        } else if (id.isEmpty()) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入身份证号", "提示", JOptionPane.WARNING_MESSAGE);
-        } else if (name.equals("")) {
+        } else if (name.isEmpty()) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入姓名", "提示", JOptionPane.WARNING_MESSAGE);
         } else {
             CardOwner cardOwner = new CardOwner(id, name, password);
@@ -229,14 +228,11 @@ public class MouseClickFunction {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册失败", "提示", JOptionPane.WARNING_MESSAGE);
             }
         }
-        {
-
-        }
     }
 
     public static void picToPdf(PicToPdfJFrame parent) {
         List<String> picArray = new ArrayList<>();
-        if (parent.getDestFileTextField().getText().equals("") || parent.getSourceFileTextField().getText().equals("") || parent.getDestFileTextField().getText().equals("")) {
+        if (parent.getDestFileTextField().getText().isEmpty() || parent.getSourceFileTextField().getText().isEmpty() || parent.getDestFileTextField().getText().isEmpty()) {
             JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -272,6 +268,33 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(parent, "转换成功", "提示", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(parent, "转换失败,可能由于文件内内容并非图片地址", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public static void deposit(DepositJFrame depositJFrame, BankService bankService) {
+        String cardNumber=depositJFrame.getCardNumberTextField().getText();
+        String password=new String(depositJFrame.getPasswordTextField().getPassword());
+        String amount=depositJFrame.getDepositAmountTextField().getText();
+        if(cardNumber.isEmpty()||password.isEmpty()||amount.isEmpty()){
+            JOptionPane.showMessageDialog(depositJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!amount.matches("\\d+(\\.\\d{1,2})?")){
+            JOptionPane.showMessageDialog(depositJFrame,"请输入正确的金额","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String cardOwnerId=bankService.getCardOwnerByCardNumber(cardNumber);
+        if (cardOwnerId==null){
+            JOptionPane.showMessageDialog(depositJFrame,"该卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!cardOwnerId.equals(Loginer.cardOwner.getId())){
+            JOptionPane.showMessageDialog(depositJFrame,"该卡号不属于您","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(password.equals(bankService.getCardPassword(cardNumber))){
+            bankService.deposit(cardNumber,amount);
+            JOptionPane.showMessageDialog(depositJFrame,"存款成功","提示",JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

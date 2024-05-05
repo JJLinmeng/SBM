@@ -4,6 +4,9 @@
     <insert id="registerCardOwner">
         INSERT INTO card_owner (id, name,password) VALUES (#{id},#{name}, #{password})
     </insert>
+    <update id="deposit">
+        UPDATE debit_card SET balance = balance + #{amount} WHERE card_number = #{cardNumber}
+    </update>
     <select id="login" resultType="CardOwner">
         SELECT * FROM card_owner WHERE id = #{id} AND password = #{password}
     </select>
@@ -12,5 +15,11 @@
     </select>
     <select id="getCards">
         SELECT * FROM debit_card WHERE owner_id = #{id}
+    </select>
+    <select id="getCardOwnerByCardNumber" resultType="java.lang.String">
+        SELECT owner_id FROM debit_card WHERE card_number = #{cardNumber}
+    </select>
+    <select id="getCardPassword" resultType="java.lang.String">
+        SELECT password FROM debit_card WHERE card_number = #{cardNumber}
     </select>
 </mapper>

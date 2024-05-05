@@ -11,4 +11,10 @@ public interface BankService {
     int getCardNumber(String id);
 
     DebitCard[] getCards(String id);
+
+    String  getCardOwnerByCardNumber(String cardNumber);
+
+    String getCardPassword(String cardNumber);
+
+    void deposit(String cardNumber, String amount);
 }
