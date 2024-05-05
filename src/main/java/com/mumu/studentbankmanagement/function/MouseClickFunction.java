@@ -297,6 +297,34 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(depositJFrame,"存款成功","提示",JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    public static void openAccount(OpenAccountJFrame openAccountJFrame, BankService bankService) {
+        String cardNumber="5463455545";//后续通过算法生成
+        String id = openAccountJFrame.getOwnerIdTextField().getText();
+        String password = new String(openAccountJFrame.getPasswordTextField().getPassword());
+        String confirmPassword = new String(openAccountJFrame.getConfirmPasswordTextField().getPassword());
+        if (id.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(openAccountJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!password.equals(confirmPassword)){
+            JOptionPane.showMessageDialog(openAccountJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!bankService.isRegister(id)) {
+            JOptionPane.showMessageDialog(openAccountJFrame, "该用户未注册", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+        if(!id.equals(Loginer.cardOwner.getId())){
+            JOptionPane.showMessageDialog(openAccountJFrame,"该身份证号不属于您,请本人来注册","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(bankService.openAccount(cardNumber,id,password)==1){{
+            JOptionPane.showMessageDialog(openAccountJFrame,"开户成功","提示",JOptionPane.INFORMATION_MESSAGE);
+        }}
+        else{
+            JOptionPane.showMessageDialog(openAccountJFrame,"开户失败","提示",JOptionPane.WARNING_MESSAGE);
+        }
+    }
 }
 
 

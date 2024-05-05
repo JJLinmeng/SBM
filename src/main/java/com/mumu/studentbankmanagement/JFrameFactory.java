@@ -35,6 +35,7 @@ public class JFrameFactory {
             case "StuToolsJFrame" -> new StuToolsJFrame(closeWay,parentComponent).handle();
             case "PicToPdfJFrame" -> new PicToPdfJFrame(closeWay,parentComponent).handle();
             case "DepositJFrame"->new DepositJFrame(closeWay,parentComponent).handle();
+            case "OpenAccountJFrame" ->new OpenAccountJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

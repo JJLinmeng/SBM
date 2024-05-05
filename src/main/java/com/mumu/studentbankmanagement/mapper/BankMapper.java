@@ -22,4 +22,8 @@ public interface BankMapper {
     String getCardPassword(String cardNumber);
 
     void deposit(String cardNumber, String amount);
+
+    boolean isRegister(String id);
+
+    int openAccount(String cardNumber, String id, String password);
 }

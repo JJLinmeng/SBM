@@ -51,4 +51,14 @@ public class bankServiceImpl implements BankService {
     public void deposit(String cardNumber, String amount) {
         bankMapper.deposit(cardNumber, amount);
     }
+
+    @Override
+    public boolean isRegister(String id) {
+        return bankMapper.isRegister(id);
+    }
+
+    @Override
+    public int openAccount(String cardNumber, String id, String password) {
+        return bankMapper.openAccount(cardNumber, id, password);
+    }
 }
