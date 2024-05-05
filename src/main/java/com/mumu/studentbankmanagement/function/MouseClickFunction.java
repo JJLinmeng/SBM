@@ -1,5 +1,8 @@
 package com.mumu.studentbankmanagement.function;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mumu.studentbankmanagement.JFrameFactory;
 import com.mumu.studentbankmanagement.Loginer;
 import com.mumu.studentbankmanagement.Util.DateUtil;
@@ -9,9 +12,17 @@ import com.mumu.studentbankmanagement.model.Stu;
 import com.mumu.studentbankmanagement.service.BankService;
 import com.mumu.studentbankmanagement.service.StuService;
 
+import com.itextpdf.text.Image;
 import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MouseClickFunction {
@@ -222,12 +233,45 @@ public class MouseClickFunction {
     }
 
     public static void picToPdf(PicToPdfJFrame parent) {
+        List<String> picArray=new ArrayList<>();
         if(parent.getDestFileTextField().getText().equals("")||parent.getSourceFileTextField().getText().equals("")||parent.getDestFileTextField().getText().equals("")){
             JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
         }else{
-            String destFilePath=parent.getDestFileTextField().getText()+"/"+parent.getDestFileTextField().getText()+".pdf";
+            String destFilePath=parent.getDestFileTextField().getText()+"/"+parent.getFileNameTextField().getText()+".pdf";
             String sourceFilePath=parent.getSourceFileTextField().getText();
+            try (BufferedReader br = new BufferedReader(new FileReader(sourceFilePath))) {
+                String line;
+                // 逐行读取文件内容
+                while ((line = br.readLine()) != null) {
+                    picArray.add(line);
+                }
 
+            } catch (IOException e) {
+                // 如果发生错误，打印错误堆栈
+                e.printStackTrace();
+            }
+            if(picArray.isEmpty()){
+                JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                Document document = new Document();
+                try {
+                    PdfWriter.getInstance(document, new FileOutputStream(destFilePath));
+                    document.open();
+                    for (String imageUrl : picArray) {
+                        Image image = Image.getInstance(new URL(imageUrl));
+                        Rectangle pageSize = document.getPageSize();
+                        if (image.getWidth() > pageSize.getWidth() || image.getHeight() > pageSize.getHeight()) {
+                            image.scaleToFit(pageSize.getWidth(), pageSize.getHeight());
+                        }
+                        document.add(image);
+                    }
+                    document.close();
+                    JOptionPane.showMessageDialog(parent, "转换成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

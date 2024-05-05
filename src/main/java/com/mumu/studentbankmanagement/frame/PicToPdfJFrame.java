@@ -52,7 +52,7 @@ public class PicToPdfJFrame extends ConfigJFrame {
         destFileButton.addActionListener(e -> {
             int returnValue = directoryChooser.showOpenDialog(this);
             if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = txtChooser.getSelectedFile();
+                File selectedFile = directoryChooser.getSelectedFile();
                 this.destFileTextField.setText(selectedFile.getAbsolutePath());
             }
         });
