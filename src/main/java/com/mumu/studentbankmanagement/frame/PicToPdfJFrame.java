@@ -63,6 +63,10 @@ public class PicToPdfJFrame extends ConfigJFrame {
         startButton.addActionListener(e -> {
             MouseClickFunction.picToPdf(this);
         });
+        buttonPanel.add(cancelButton = new JButton("取消"));
+        cancelButton.addActionListener(e -> {
+            MouseClickFunction.closeJFrame(this);
+        });
     }
 }
 

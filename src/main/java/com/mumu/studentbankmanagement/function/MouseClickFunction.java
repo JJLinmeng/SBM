@@ -1,6 +1,7 @@
 package com.mumu.studentbankmanagement.function;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mumu.studentbankmanagement.JFrameFactory;
@@ -13,6 +14,7 @@ import com.mumu.studentbankmanagement.service.BankService;
 import com.mumu.studentbankmanagement.service.StuService;
 
 import com.itextpdf.text.Image;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -40,19 +42,19 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(parent, "请将信息填写完整,名字,密码,专业,入学年份不能为空", "提示", JOptionPane.WARNING_MESSAGE);
         } else {
             Stu stu = new Stu(name, password, birthday, speciality, entryYear, province, city, Stu.STUDENT);
-            if(stuService.checkIsExist(stu.getId())==null) {
+            if (stuService.checkIsExist(stu.getId()) == null) {
                 stuService.addStudent(stu);
-                if(parent.parentComponent instanceof StuInfoListJFrame) {
-                    ((StuInfoListJFrame) parent.parentComponent).updateTable(StuInfoListJFrame.ADD, stu,null);
+                if (parent.parentComponent instanceof StuInfoListJFrame) {
+                    ((StuInfoListJFrame) parent.parentComponent).updateTable(StuInfoListJFrame.ADD, stu, null);
                 }
-                int result = JOptionPane.showConfirmDialog(parent, "成功添加"+stu+" "+"是否继续添加？","提示", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(parent, "成功添加" + stu + " " + "是否继续添加？", "提示", JOptionPane.YES_NO_OPTION);
                 // 检查用户的选择
                 if (result == JOptionPane.YES_OPTION) {
                     resetStuInfo(parent);
                 } else {
                     closeJFrame(parent);
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(parent, "该学号已存在", "提示", JOptionPane.WARNING_MESSAGE);
             }
 
@@ -83,8 +85,8 @@ public class MouseClickFunction {
                 JOptionPane.showMessageDialog(parent, "登录成功");
                 parent.setVisible(false);
                 parent.getParentComponent().setVisible(false);
-                Loginer.user=user;
-                MouseClickFunction.openJFrame("StuMainJFrame",JFrame.EXIT_ON_CLOSE, parent);
+                Loginer.user = user;
+                MouseClickFunction.openJFrame("StuMainJFrame", JFrame.EXIT_ON_CLOSE, parent);
             } else {
                 //登录失败
                 JOptionPane.showMessageDialog(parent, "登录失败");
@@ -93,18 +95,19 @@ public class MouseClickFunction {
             ex.printStackTrace();
         }
     }
+
     public static void checkIsLogin(BankLoginJFrame parent, BankService userService) {
         String id = parent.getIdTextField().getText();
         String password = new String(parent.getPasswordTextField().getPassword());
         try {
-           CardOwner cardOwner = userService.login(id, password);
+            CardOwner cardOwner = userService.login(id, password);
             if (cardOwner != null) {
                 //登录成功
                 JOptionPane.showMessageDialog(parent, "登录成功");
                 parent.setVisible(false);
                 parent.getParentComponent().setVisible(false);
-                Loginer.cardOwner=cardOwner;
-                MouseClickFunction.openJFrame("CardOwnerJFrame",JFrame.EXIT_ON_CLOSE, parent);
+                Loginer.cardOwner = cardOwner;
+                MouseClickFunction.openJFrame("CardOwnerJFrame", JFrame.EXIT_ON_CLOSE, parent);
             } else {
                 //登录失败
                 JOptionPane.showMessageDialog(parent, "登录失败");
@@ -147,31 +150,32 @@ public class MouseClickFunction {
 
     public static void searchStu(SearchConfirmJFrame searchConfirmFrame, StuService stuService, Stu stu) {
         List<Stu> stuList = stuService.selectStuByCondition(stu);
-        if(stuList.isEmpty()){
+        if (stuList.isEmpty()) {
             JOptionPane.showMessageDialog(searchConfirmFrame, "未找到符合条件的用户", "提示", JOptionPane.WARNING_MESSAGE);
             MouseClickFunction.closeJFrame(searchConfirmFrame);
-        }else{
-            searchConfirmFrame.getParentComponent().updateTable(StuInfoListJFrame.SEARCH,null,stuList);
+        } else {
+            searchConfirmFrame.getParentComponent().updateTable(StuInfoListJFrame.SEARCH, null, stuList);
         }
         MouseClickFunction.closeJFrame(searchConfirmFrame);
     }
 
-    public static void openJFrame(String frame,int closeway,JFrame parent,Stu stu) {
-        JFrameFactory.create(frame,closeway, parent,stu);
-    }
-    public static void openJFrame(String frame,int closeway,JFrame parent) {
-        JFrameFactory.create(frame,closeway, parent);
+    public static void openJFrame(String frame, int closeway, JFrame parent, Stu stu) {
+        JFrameFactory.create(frame, closeway, parent, stu);
     }
 
-    public static void updateStu(UpdateStuJFrame updateStuJFrame, StuService stuService,Stu stu) {
-        updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.DELETE,stu,null);
+    public static void openJFrame(String frame, int closeway, JFrame parent) {
+        JFrameFactory.create(frame, closeway, parent);
+    }
+
+    public static void updateStu(UpdateStuJFrame updateStuJFrame, StuService stuService, Stu stu) {
+        updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.DELETE, stu, null);
         String name = updateStuJFrame.getNameTextField().getText();
         String password = new String(updateStuJFrame.getPasswordTextField().getPassword());
         LocalDate birthday = DateUtil.DateToLocalDate(updateStuJFrame.getBirthdayDatePicker().getDate());
         String speciality = updateStuJFrame.getSpecialityTextField().getText();
         int entryYear = Integer.parseInt(updateStuJFrame.getEntryYearTextField().getText());
-        String province=updateStuJFrame.getProvinceCitySelector().getProvinceComboBox().getSelectedItem().toString();
-        String city=updateStuJFrame.getProvinceCitySelector().getCityComboBox().getSelectedItem().toString();
+        String province = updateStuJFrame.getProvinceCitySelector().getProvinceComboBox().getSelectedItem().toString();
+        String city = updateStuJFrame.getProvinceCitySelector().getCityComboBox().getSelectedItem().toString();
         stu.setName(name);
         stu.setPassword(password);
         stu.setBirthday(birthday);
@@ -182,23 +186,20 @@ public class MouseClickFunction {
         stuService.updateStu(stu);
         JOptionPane.showMessageDialog(updateStuJFrame, "修改成功");
         MouseClickFunction.closeJFrame(updateStuJFrame);
-        updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.ADD,stu,null);
+        updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.ADD, stu, null);
     }
 
     public static void modifyStuPassword(StuPasswordChangeJFrame stuPasswordChangeJFrame, StuService stuService) {
         String oldPassword = new String(stuPasswordChangeJFrame.getOldPasswordField().getPassword());
         String newPassword = new String(stuPasswordChangeJFrame.getNewPasswordField().getPassword());
         String confirmPassword = new String(stuPasswordChangeJFrame.getConfirmPasswordField().getPassword());
-        if(!oldPassword.equals(Loginer.user.getPassword())){
+        if (!oldPassword.equals(Loginer.user.getPassword())) {
             JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "原密码错误", "提示", JOptionPane.WARNING_MESSAGE);
-        }
-        else if(newPassword.equals(oldPassword)){
+        } else if (newPassword.equals(oldPassword)) {
             JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "新密码不能与原密码相同", "提示", JOptionPane.WARNING_MESSAGE);
-        }
-        else if(!newPassword.equals(confirmPassword)){
+        } else if (!newPassword.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
-        }
-        else{
+        } else {
             Loginer.user.setPassword(newPassword);
             stuService.updateStu(Loginer.user);
             JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "修改成功");
@@ -208,71 +209,71 @@ public class MouseClickFunction {
 
 
     public static void registerCardOwner(BankRegisterJFrame bankRegisterJFrame, BankService bankService) {
-        String id=bankRegisterJFrame.getIdTextField().getText();
-        String password=new String(bankRegisterJFrame.getPasswordField().getPassword());
-        String name=bankRegisterJFrame.getNameTextField().getText();
-        String confirmPassword=new String(bankRegisterJFrame.getPasswordConfirmField().getPassword());
-        if(!password.equals(confirmPassword)){
+        String id = bankRegisterJFrame.getIdTextField().getText();
+        String password = new String(bankRegisterJFrame.getPasswordField().getPassword());
+        String name = bankRegisterJFrame.getNameTextField().getText();
+        String confirmPassword = new String(bankRegisterJFrame.getPasswordConfirmField().getPassword());
+        if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
-        }else if (id.equals("")) {
+        } else if (id.equals("")) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入身份证号", "提示", JOptionPane.WARNING_MESSAGE);
-        } else if(name.equals("")){
+        } else if (name.equals("")) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入姓名", "提示", JOptionPane.WARNING_MESSAGE);
-        }else{
-            CardOwner cardOwner=new CardOwner(id,name,password);
+        } else {
+            CardOwner cardOwner = new CardOwner(id, name, password);
             int result = bankService.registerCardOwner(cardOwner);
-            if(result>0){
+            if (result > 0) {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册成功");
                 MouseClickFunction.closeJFrame(bankRegisterJFrame);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册失败", "提示", JOptionPane.WARNING_MESSAGE);
             }
-    }{
+        }
+        {
 
         }
     }
 
     public static void picToPdf(PicToPdfJFrame parent) {
-        List<String> picArray=new ArrayList<>();
-        if(parent.getDestFileTextField().getText().equals("")||parent.getSourceFileTextField().getText().equals("")||parent.getDestFileTextField().getText().equals("")){
+        List<String> picArray = new ArrayList<>();
+        if (parent.getDestFileTextField().getText().equals("") || parent.getSourceFileTextField().getText().equals("") || parent.getDestFileTextField().getText().equals("")) {
             JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
-        }else{
-            String destFilePath=parent.getDestFileTextField().getText()+"/"+parent.getFileNameTextField().getText()+".pdf";
-            String sourceFilePath=parent.getSourceFileTextField().getText();
-            try (BufferedReader br = new BufferedReader(new FileReader(sourceFilePath))) {
-                String line;
-                // 逐行读取文件内容
-                while ((line = br.readLine()) != null) {
-                    picArray.add(line);
+            return;
+        }
+        String destFilePath = parent.getDestFileTextField().getText() + "/" + parent.getFileNameTextField().getText() + ".pdf";
+        String sourceFilePath = parent.getSourceFileTextField().getText();
+        try (BufferedReader br = new BufferedReader(new FileReader(sourceFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                picArray.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (picArray.isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Document document = new Document(PageSize.A4, 0, 0, 0, 0);
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(destFilePath));
+            document.open();
+            for (String imageUrl : picArray) {
+                Image image = Image.getInstance(new URL(imageUrl));
+                Rectangle pageSize = document.getPageSize();
+                if (image.getWidth() > pageSize.getWidth() || image.getHeight() > pageSize.getHeight()) {
+                    image.scaleToFit(pageSize.getWidth(), pageSize.getHeight());
                 }
-
-            } catch (IOException e) {
-                // 如果发生错误，打印错误堆栈
-                e.printStackTrace();
+                document.newPage();
+                image.setAbsolutePosition(0, 0);
+                document.add(image);
             }
-            if(picArray.isEmpty()){
-                JOptionPane.showMessageDialog(parent, "请输入正确的文件路径", "提示", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                Document document = new Document();
-                try {
-                    PdfWriter.getInstance(document, new FileOutputStream(destFilePath));
-                    document.open();
-                    for (String imageUrl : picArray) {
-                        Image image = Image.getInstance(new URL(imageUrl));
-                        Rectangle pageSize = document.getPageSize();
-                        if (image.getWidth() > pageSize.getWidth() || image.getHeight() > pageSize.getHeight()) {
-                            image.scaleToFit(pageSize.getWidth(), pageSize.getHeight());
-                        }
-                        document.add(image);
-                    }
-                    document.close();
-                    JOptionPane.showMessageDialog(parent, "转换成功", "提示", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            document.close();
+            JOptionPane.showMessageDialog(parent, "转换成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(parent, "转换失败,可能由于文件内内容并非图片地址", "提示", JOptionPane.WARNING_MESSAGE);
         }
     }
 }
+
 
