@@ -10,6 +10,8 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class bankServiceImpl implements BankService {
     @Autowired
@@ -60,5 +62,15 @@ public class bankServiceImpl implements BankService {
     @Override
     public int openAccount(String cardNumber, String id, String password) {
         return bankMapper.openAccount(cardNumber, id, password);
+    }
+
+    @Override
+    public void withdraw(String cardNumber, String amount) {
+        bankMapper.withdraw(cardNumber,amount);
+    }
+
+    @Override
+    public BigDecimal getCardBalance(String cardNumber) {
+        return bankMapper.getCardBalance(cardNumber);
     }
 }

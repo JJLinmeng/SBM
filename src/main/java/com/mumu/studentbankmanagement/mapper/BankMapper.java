@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.jmx.export.annotation.ManagedNotification;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+
 @Mapper
 @Repository
 public interface BankMapper {
@@ -26,4 +28,8 @@ public interface BankMapper {
     boolean isRegister(String id);
 
     int openAccount(String cardNumber, String id, String password);
+
+    void withdraw(String cardNumber, String amount);
+
+    BigDecimal getCardBalance(String cardNumber);
 }

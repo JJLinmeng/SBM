@@ -3,6 +3,8 @@ package com.mumu.studentbankmanagement.service;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 
+import java.math.BigDecimal;
+
 public interface BankService {
     CardOwner login(String stuId, String stuPwd);
 
@@ -21,4 +23,8 @@ public interface BankService {
     boolean isRegister(String id);
 
     int openAccount(String cardNumber,String id, String password);
+
+    void withdraw(String cardNumber, String amount);
+
+    BigDecimal getCardBalance(String cardNumber);
 }

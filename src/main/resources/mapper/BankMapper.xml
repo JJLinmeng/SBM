@@ -10,6 +10,9 @@
     <update id="deposit">
         UPDATE debit_card SET balance = balance + #{amount} WHERE card_number = #{cardNumber}
     </update>
+    <update id="withdraw">
+        UPDATE debit_card SET balance = balance - #{amount} WHERE card_number = #{cardNumber}
+    </update>
     <select id="login" resultType="CardOwner">
         SELECT * FROM card_owner WHERE id = #{id} AND password = #{password}
     </select>
@@ -27,5 +30,8 @@
     </select>
     <select id="isRegister" resultType="java.lang.Boolean">
         SELECT EXISTS(SELECT * FROM card_owner WHERE id = #{id})
+    </select>
+    <select id="getCardBalance" resultType="java.math.BigDecimal">
+        SELECT balance FROM debit_card WHERE card_number = #{cardNumber}
     </select>
 </mapper>

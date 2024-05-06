@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -323,6 +324,37 @@ public class MouseClickFunction {
         }}
         else{
             JOptionPane.showMessageDialog(openAccountJFrame,"开户失败","提示",JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public static void withdraw(WithdrawJFrame withdrawJFrame, BankService bankService) {
+        String cardNumber=withdrawJFrame.getCardNumberTextField().getText();
+        String password=new String(withdrawJFrame.getPasswordField().getPassword());
+        String amount=withdrawJFrame.getMoneyTextField().getText();
+        if(cardNumber.isEmpty()||password.isEmpty()||amount.isEmpty()){
+            JOptionPane.showMessageDialog(withdrawJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!amount.matches("\\d+(\\.\\d{1,2})?")){
+            JOptionPane.showMessageDialog(withdrawJFrame,"请输入正确的金额","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String cardOwnerId=bankService.getCardOwnerByCardNumber(cardNumber);
+        if (cardOwnerId==null){
+            JOptionPane.showMessageDialog(withdrawJFrame,"该卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!cardOwnerId.equals(Loginer.cardOwner.getId())){
+            JOptionPane.showMessageDialog(withdrawJFrame,"该卡号不属于您","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(new BigDecimal(amount).compareTo(bankService.getCardBalance(cardNumber))>0 ) {
+            JOptionPane.showMessageDialog(withdrawJFrame,"余额不足","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(password.equals(bankService.getCardPassword(cardNumber))){
+            bankService.withdraw(cardNumber,amount);
+            JOptionPane.showMessageDialog(withdrawJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
