@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 
-public class CardOwnerJFrame extends ConfigJFrame{
+public class CardOwnerJFrame extends ConfigJFrame {
     private JPanel navbarPanel;
     private JLabel personalInfoLabel;
     private JPanel sidePanel;
@@ -16,40 +16,42 @@ public class CardOwnerJFrame extends ConfigJFrame{
     private JLabel depositLabel;
     private JLabel withdrawLabel;
     private JLabel transferJLabel;
+    private JLabel cancelAccountLabel;
+
     public CardOwnerJFrame(int closeWay, JFrame parentComponent) {
         super(closeWay, parentComponent);
     }
 
     @Override
     public void init() {
-        this.add(navbarPanel=new JPanel(), BorderLayout.NORTH);
-        this.add(sidePanel=new JPanel(new GridLayout(5,1)), BorderLayout.WEST);
-        navbarPanel.add(navbarLabel=new JLabel("欢迎您:"+ Loginer.cardOwner.getName()));
-        sidePanel.add(personalInfoLabel=new JLabel("个人信息"));
-        sidePanel.add(openAccountLabel=new JLabel("开卡"));
-        sidePanel.add(depositLabel=new JLabel("存款"));
-        sidePanel.add(withdrawLabel=new JLabel("取款"));
-        sidePanel.add(transferJLabel=new JLabel("转账"));
-
+        this.add(navbarPanel = new JPanel(), BorderLayout.NORTH);
+        this.add(sidePanel = new JPanel(new GridLayout(6, 1)), BorderLayout.WEST);
+        navbarPanel.add(navbarLabel = new JLabel("欢迎您:" + Loginer.cardOwner.getName()));
+        sidePanel.add(personalInfoLabel = new JLabel("个人信息"));
+        sidePanel.add(openAccountLabel = new JLabel("开卡"));
+        sidePanel.add(depositLabel = new JLabel("存款"));
+        sidePanel.add(withdrawLabel = new JLabel("取款"));
+        sidePanel.add(transferJLabel = new JLabel("转账"));
+        sidePanel.add(cancelAccountLabel = new JLabel("销户"));
 
         depositLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                MouseClickFunction.openJFrame("DepositJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
+                MouseClickFunction.openJFrame("DepositJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
             }
         });
 
         openAccountLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                MouseClickFunction.openJFrame("OpenAccountJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
+                MouseClickFunction.openJFrame("OpenAccountJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
             }
         });
 
         personalInfoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                MouseClickFunction.openJFrame("CardOwnerInfoJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
+                MouseClickFunction.openJFrame("CardOwnerInfoJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
             }
         });
 
@@ -57,7 +59,7 @@ public class CardOwnerJFrame extends ConfigJFrame{
         withdrawLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                MouseClickFunction.openJFrame("WithdrawJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
+                MouseClickFunction.openJFrame("WithdrawJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
 
             }
         });
@@ -65,9 +67,15 @@ public class CardOwnerJFrame extends ConfigJFrame{
         transferJLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                MouseClickFunction.openJFrame("TransferJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
+                MouseClickFunction.openJFrame("TransferJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
             }
         });
 
+        cancelAccountLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                MouseClickFunction.openJFrame("CancelAccountJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
+            }
+        });
     }
 }

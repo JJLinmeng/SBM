@@ -13,6 +13,9 @@
     <update id="withdraw">
         UPDATE debit_card SET balance = balance - #{amount} WHERE card_number = #{cardNumber}
     </update>
+    <delete id="cancelAccount">
+        DELETE FROM debit_card WHERE card_number = #{cardNumber}
+    </delete>
     <select id="login" resultType="CardOwner">
         SELECT * FROM card_owner WHERE id = #{id} AND password = #{password}
     </select>
