@@ -394,6 +394,43 @@ public class MouseClickFunction {
         bankService.transfer(payerCardNumber,payeeCardNumber,amount);
         JOptionPane.showMessageDialog(transferJFrame,"转账成功","提示",JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public static void cancelAccount(CancelAccountJFrame cancelAccountJFrame, BankService bankService) {
+
+        String cardNumber = cancelAccountJFrame.getCardNumberTextField().getText();
+        String id=cancelAccountJFrame.getOwnerIdTextField().getText();
+        String password = new String(cancelAccountJFrame.getPasswordTextField().getPassword());
+        BigDecimal cardBalance = bankService.getCardBalance(cardNumber);
+        if (cardNumber.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(cancelAccountJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!id.equals(Loginer.cardOwner.getId())){
+            JOptionPane.showMessageDialog(cancelAccountJFrame, "这不是你的卡,如确定要销户,请联系管理员", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!password.equals(bankService.getCardPassword(cardNumber))){
+            JOptionPane.showMessageDialog(cancelAccountJFrame, "密码错误", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(cardBalance.compareTo(new BigDecimal(0))>0){
+            JOptionPane.showMessageDialog(cancelAccountJFrame, "请先将余额清零", "提示", JOptionPane.WARNING_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(cancelAccountJFrame, "是否以现金方式全部转出,共"+cardBalance);
+            if(result==JOptionPane.YES_OPTION){
+                bankService.withdraw(cardNumber,cardBalance.toString());
+                JOptionPane.showMessageDialog(cancelAccountJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else return;
+        }
+        int choice = JOptionPane.showConfirmDialog(cancelAccountJFrame, "请再次确认是否删除该卡号" + cardNumber);
+        if (choice == JOptionPane.YES_OPTION){
+            bankService.cancelAccount(cardNumber);
+            JOptionPane.showMessageDialog(cancelAccountJFrame, "销户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+
+    }
+
 }
 
 

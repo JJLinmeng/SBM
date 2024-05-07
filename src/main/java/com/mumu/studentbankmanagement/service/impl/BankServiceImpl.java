@@ -80,4 +80,9 @@ public class BankServiceImpl implements BankService {
         bankMapper.deposit(payeeCardNumber,amount);
         bankMapper.withdraw(payerCardNumber,amount);
     }
+
+    @Override
+    public void cancelAccount(String cardNumber) {
+        bankMapper.cancelAccount(cardNumber);
+    }
 }

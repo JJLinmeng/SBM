@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.io.IOException;
 
 @SpringBootApplication
-@EnableTransactionManagement(proxyTargetClass=true)
+//@EnableTransactionManagement
 public class StudentBankManagementApplication {
 
     public static void main(String[] args)  {

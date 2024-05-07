@@ -38,6 +38,7 @@ public class JFrameFactory {
             case "OpenAccountJFrame" ->new OpenAccountJFrame(closeWay,parentComponent).handle();
             case "WithdrawJFrame" ->new WithdrawJFrame(closeWay,parentComponent).handle();
             case "TransferJFrame" ->new TransferJFrame(closeWay,parentComponent).handle();
+            case "CancelAccountJFrame" ->new CancelAccountJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

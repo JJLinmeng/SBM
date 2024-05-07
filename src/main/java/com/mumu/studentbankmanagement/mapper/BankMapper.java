@@ -32,4 +32,6 @@ public interface BankMapper {
     void withdraw(String cardNumber, String amount);
 
     BigDecimal getCardBalance(String cardNumber);
+
+    void cancelAccount(String cardNumber);
 }
