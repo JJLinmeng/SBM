@@ -19,7 +19,7 @@ public class TransferJFrame extends ConfigJFrame{
     private JTextField payerCardNumberTextField;
     private JLabel amountLabel;
     @Getter
-    private JLabel amountTextField;
+    private JTextField amountTextField;
     private JLabel payerPasswordLabel;
     @Getter
     private JPasswordField payerPasswordField;
@@ -36,13 +36,14 @@ public class TransferJFrame extends ConfigJFrame{
         gridBagPanel.add(0,0,0.2,payeeCardNumberLabel=new JLabel("付款人卡号"));
         gridBagPanel.add(1,0,1,payerCardNumberTextField=new JTextField(16));
         gridBagPanel.add(0,1,0.2,payerCardNumberLabel=new JLabel("收款人卡号"));
-        gridBagPanel.add(1,1,1,payerCardNumberTextField=new JTextField(16));
+        gridBagPanel.add(1,1,1,payeeCardNumberTextField=new JTextField(16));
         gridBagPanel.add(0,2,0.2,amountLabel=new JLabel("转账金额"));
-        gridBagPanel.add(1,2,1,amountTextField=new JLabel());
+        gridBagPanel.add(1,2,1,amountTextField=new JTextField(16));
         gridBagPanel.add(0,3,0.2,payerPasswordLabel=new JLabel("付款人卡号密码"));
         gridBagPanel.add(1,3,1,payerPasswordField=new JPasswordField(16));
         buttonPanel.add(transferButton=new JButton("转账"));
         buttonPanel.add(backButton=new JButton("返回"));
         transferButton.addActionListener(e-> MouseClickFunction.transfer(this, bankService));
+        backButton.addActionListener(e-> MouseClickFunction.closeJFrame(this));
     }
 }

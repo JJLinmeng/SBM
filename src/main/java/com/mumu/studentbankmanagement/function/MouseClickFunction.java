@@ -392,6 +392,7 @@ public class MouseClickFunction {
            return;
         }
         bankService.transfer(payerCardNumber,payeeCardNumber,amount);
+        JOptionPane.showMessageDialog(transferJFrame,"转账成功","提示",JOptionPane.INFORMATION_MESSAGE);
     }
 }
 
