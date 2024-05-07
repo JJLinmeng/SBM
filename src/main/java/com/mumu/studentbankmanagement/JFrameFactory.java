@@ -37,6 +37,7 @@ public class JFrameFactory {
             case "DepositJFrame"->new DepositJFrame(closeWay,parentComponent).handle();
             case "OpenAccountJFrame" ->new OpenAccountJFrame(closeWay,parentComponent).handle();
             case "WithdrawJFrame" ->new WithdrawJFrame(closeWay,parentComponent).handle();
+            case "TransferJFrame" ->new TransferJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

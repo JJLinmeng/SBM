@@ -357,6 +357,42 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(withdrawJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    public static void transfer(TransferJFrame transferJFrame, BankService bankService) {
+        String payerCardNumber=transferJFrame.getPayerCardNumberTextField().getText();
+        String payeeCardNumber=transferJFrame.getPayeeCardNumberTextField().getText();
+        String payerPassword=new String(transferJFrame.getPayerPasswordField().getPassword());
+        String amount=transferJFrame.getAmountTextField().getText();
+        if(payerPassword.isEmpty()||amount.isEmpty()||payerCardNumber.isEmpty()||payeeCardNumber.isEmpty()){
+            JOptionPane.showMessageDialog(transferJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!amount.matches("\\d+(\\.\\d{1,2})?")){
+            JOptionPane.showMessageDialog(transferJFrame,"请输入正确的金额","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(new BigDecimal(amount).compareTo(bankService.getCardBalance(payerCardNumber))>0){
+            JOptionPane.showMessageDialog(transferJFrame,"余额不足","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(bankService.getCardOwnerByCardNumber(payerCardNumber)==null){
+            JOptionPane.showMessageDialog(transferJFrame,"付款卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(bankService.getCardOwnerByCardNumber(payeeCardNumber)==null){
+            JOptionPane.showMessageDialog(transferJFrame,"收款卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!bankService.getCardOwnerByCardNumber(payerCardNumber).equals(Loginer.cardOwner.getId())){
+            JOptionPane.showMessageDialog(transferJFrame,"付款卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!payerPassword.equals(bankService.getCardPassword(payerCardNumber))){
+           JOptionPane.showMessageDialog(transferJFrame,"付款密码错误","提示",JOptionPane.WARNING_MESSAGE);
+           return;
+        }
+        bankService.transfer(payerCardNumber,payeeCardNumber,amount);
+    }
 }
 
 

@@ -15,6 +15,7 @@ public class CardOwnerJFrame extends ConfigJFrame{
     private JLabel openAccountLabel;
     private JLabel depositLabel;
     private JLabel withdrawLabel;
+    private JLabel transferJLabel;
     public CardOwnerJFrame(int closeWay, JFrame parentComponent) {
         super(closeWay, parentComponent);
     }
@@ -28,7 +29,7 @@ public class CardOwnerJFrame extends ConfigJFrame{
         sidePanel.add(openAccountLabel=new JLabel("开卡"));
         sidePanel.add(depositLabel=new JLabel("存款"));
         sidePanel.add(withdrawLabel=new JLabel("取款"));
-
+        sidePanel.add(transferJLabel=new JLabel("转账"));
 
 
         depositLabel.addMouseListener(new MouseAdapter() {
@@ -58,6 +59,13 @@ public class CardOwnerJFrame extends ConfigJFrame{
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 MouseClickFunction.openJFrame("WithdrawJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
 
+            }
+        });
+
+        transferJLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                MouseClickFunction.openJFrame("TransferJFrame",JFrame.DISPOSE_ON_CLOSE,CardOwnerJFrame.this);
             }
         });
 

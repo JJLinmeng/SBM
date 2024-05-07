@@ -27,4 +27,6 @@ public interface BankService {
     void withdraw(String cardNumber, String amount);
 
     BigDecimal getCardBalance(String cardNumber);
+
+    void transfer(String payerCardNumber, String payeeCardNumber, String amount);
 }

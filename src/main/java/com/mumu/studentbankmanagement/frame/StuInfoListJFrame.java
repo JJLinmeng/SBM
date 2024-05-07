@@ -43,6 +43,7 @@ public class StuInfoListJFrame extends ConfigJFrame {
     @Override
     public void init() {
         this.add(this.jScrollPane = new JScrollPane(this.stuList=new JList<>(this.stuListModel=new DefaultListModel<>())), BorderLayout.CENTER);
+
         this.add(this.toolPanel = new JPanel(), BorderLayout.SOUTH);
 
         for (Stu stu : this.allStudent) {
