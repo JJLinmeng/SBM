@@ -16,5 +16,11 @@ public class BankInfo {
     private BigDecimal amount;
     private String ownerId;
     private String cardNumber;
-
+    public BankInfo(LocalDateTime time,String type,BigDecimal amount,String ownerId,String cardNumber){
+        this.time=time;
+        this.type=type;
+        this.amount=amount;
+        this.ownerId=ownerId;
+        this.cardNumber=cardNumber;
+    }
 }

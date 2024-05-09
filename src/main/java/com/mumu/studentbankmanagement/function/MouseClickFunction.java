@@ -8,6 +8,7 @@ import com.mumu.studentbankmanagement.JFrameFactory;
 import com.mumu.studentbankmanagement.Loginer;
 import com.mumu.studentbankmanagement.Util.DateUtil;
 import com.mumu.studentbankmanagement.frame.*;
+import com.mumu.studentbankmanagement.model.BankInfo;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.Stu;
 import com.mumu.studentbankmanagement.service.BankService;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +189,7 @@ public class MouseClickFunction {
         JOptionPane.showMessageDialog(updateStuJFrame, "修改成功");
         MouseClickFunction.closeJFrame(updateStuJFrame);
         updateStuJFrame.getParentComponent().updateTable(StuInfoListJFrame.ADD, stu, null);
+
     }
 
     public static void modifyStuPassword(StuPasswordChangeJFrame stuPasswordChangeJFrame, StuService stuService) {
@@ -225,10 +228,13 @@ public class MouseClickFunction {
             if (result > 0) {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册成功");
                 MouseClickFunction.closeJFrame(bankRegisterJFrame);
+                BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"注册",new BigDecimal("0"),id,"null");
+                bankService.addBankInfo(bankInfo);
             } else {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册失败", "提示", JOptionPane.WARNING_MESSAGE);
             }
         }
+
     }
 
     public static void picToPdf(PicToPdfJFrame parent) {
@@ -296,6 +302,8 @@ public class MouseClickFunction {
         if(password.equals(bankService.getCardPassword(cardNumber))){
             bankService.deposit(cardNumber,amount);
             JOptionPane.showMessageDialog(depositJFrame,"存款成功","提示",JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"存款",new BigDecimal(amount),Loginer.cardOwner.getId(),cardNumber);
+            bankService.addBankInfo(bankInfo);
         }
     }
 
@@ -321,6 +329,8 @@ public class MouseClickFunction {
         }
         if(bankService.openAccount(cardNumber,id,password)==1){{
             JOptionPane.showMessageDialog(openAccountJFrame,"开户成功","提示",JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"开户",new BigDecimal(0),id,cardNumber);
+            bankService.addBankInfo(bankInfo);
         }}
         else{
             JOptionPane.showMessageDialog(openAccountJFrame,"开户失败","提示",JOptionPane.WARNING_MESSAGE);
@@ -355,6 +365,8 @@ public class MouseClickFunction {
         if(password.equals(bankService.getCardPassword(cardNumber))){
             bankService.withdraw(cardNumber,amount);
             JOptionPane.showMessageDialog(withdrawJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"取款",new BigDecimal(amount),Loginer.cardOwner.getId(),cardNumber);
+            bankService.addBankInfo(bankInfo);
         }
     }
 
@@ -393,6 +405,10 @@ public class MouseClickFunction {
         }
         bankService.transfer(payerCardNumber,payeeCardNumber,amount);
         JOptionPane.showMessageDialog(transferJFrame,"转账成功","提示",JOptionPane.INFORMATION_MESSAGE);
+        BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"转账",new BigDecimal(amount),Loginer.cardOwner.getId(),payerCardNumber);
+        bankService.addBankInfo(bankInfo);
+        bankInfo=new BankInfo(LocalDateTime.now(),"收账",new BigDecimal(amount),bankService.getCardOwnerByCardNumber(payeeCardNumber),payeeCardNumber);
+        bankService.addBankInfo(bankInfo);
     }
 
     public static void cancelAccount(CancelAccountJFrame cancelAccountJFrame, BankService bankService) {
@@ -426,6 +442,8 @@ public class MouseClickFunction {
         if (choice == JOptionPane.YES_OPTION){
             bankService.cancelAccount(cardNumber);
             JOptionPane.showMessageDialog(cancelAccountJFrame, "销户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"销户",new BigDecimal("0"),Loginer.cardOwner.getId(),cardNumber);
+            bankService.addBankInfo(bankInfo);
         }
 
 
