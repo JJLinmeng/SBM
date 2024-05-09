@@ -24,7 +24,7 @@ public interface BankService {
 
     boolean isRegister(String id);
 
-    int openAccount(String cardNumber,String id, String password);
+    int openAccount(String cardNumber, String id, String password, String type, BigDecimal limit);
 
     void withdraw(String cardNumber, String amount);
 
@@ -37,4 +37,8 @@ public interface BankService {
     void addBankInfo(BankInfo bankInfo);
 
     List<BankInfo> getBankInfosByOwnerId(String id);
+
+    String getCardTypeByCardNumber(String cardNumber);
+
+    BigDecimal getCardLimitByCardNumber(String cardNumber);
 }

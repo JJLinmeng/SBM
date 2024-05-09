@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mumu.studentbankmanagement.mapper.StuMapper">
     <insert id="addStu" >
-        INSERT INTO stu (id,name,password,birthday,speciality,province,city,entry_year,role) VALUES (#{id}, #{name}, #{password},#{birthday},#{speciality},#{province},#{city},#{entryYear},#{role})
+        INSERT INTO stu (id,name,password,birthday,speciality,province,city,entry_year,role,identity_number) VALUES (#{id}, #{name}, #{password},#{birthday},#{speciality},#{province},#{city},#{entryYear},#{role},#{identityNumber})
     </insert>
     <update id="updateStu">
         UPDATE stu SET name = #{name},password = #{password},birthday = #{birthday},speciality = #{speciality},province = #{province},city = #{city},entry_year = #{entryYear} WHERE id = #{id}

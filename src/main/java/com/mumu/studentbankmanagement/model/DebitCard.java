@@ -3,6 +3,7 @@ package com.mumu.studentbankmanagement.model;
 import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -10,8 +11,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DebitCard {
-    private String cardNumber;
-    private String ownerId;
-    private BigDecimal balance;
-    private String password;
+    protected String cardNumber;
+    protected String ownerId;
+    protected BigDecimal balance;
+    protected String password;
+    private BigDecimal limit;
 }

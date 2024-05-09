@@ -1,5 +1,6 @@
 package com.mumu.studentbankmanagement.frame;
 
+import com.mumu.studentbankmanagement.Loginer;
 import com.mumu.studentbankmanagement.component.MenuLabel;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ public class MenuJFrame extends ConfigJFrame {
 
     @Override
     public void init() {
+        Loginer.cardOwner=null;
+        Loginer.user=null;
         // 使用FlowLayout布局
         this.setLayout(new FlowLayout());
         // 初始化学生系统按钮和银行系统按钮

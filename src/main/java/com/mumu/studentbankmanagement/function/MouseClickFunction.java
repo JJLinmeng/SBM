@@ -37,31 +37,37 @@ public class MouseClickFunction {
         LocalDate birthday = parent.getBirthdayDatePicker().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         String speciality = parent.getSpecialityTextField().getText();
         int entryYear = Integer.parseInt(parent.getEntryYearTextField().getText());
+        String identityNumber = parent.getIdentityNumberTextField().getText();
         //这里要处理异常,甚至要考虑不填的情况,后续补充
         String province = parent.getProvinceCitySelector().getProvinceComboBox().getSelectedItem().toString();
         String city = parent.getProvinceCitySelector().getCityComboBox().getSelectedItem().toString();
-        if (name.equals("") || password.equals("") || speciality.equals("")) {
-            JOptionPane.showMessageDialog(parent, "请将信息填写完整,名字,密码,专业,入学年份不能为空", "提示", JOptionPane.WARNING_MESSAGE);
-        } else {
-            Stu stu = new Stu(name, password, birthday, speciality, entryYear, province, city, Stu.STUDENT);
-            if (stuService.checkIsExist(stu.getId()) == null) {
-                stuService.addStudent(stu);
-                if (parent.parentComponent instanceof StuInfoListJFrame) {
-                    ((StuInfoListJFrame) parent.parentComponent).updateTable(StuInfoListJFrame.ADD, stu, null);
-                }
-                int result = JOptionPane.showConfirmDialog(parent, "成功添加" + stu + " " + "是否继续添加？", "提示", JOptionPane.YES_NO_OPTION);
-                // 检查用户的选择
-                if (result == JOptionPane.YES_OPTION) {
-                    resetStuInfo(parent);
-                } else {
-                    closeJFrame(parent);
-                }
-            } else {
-                JOptionPane.showMessageDialog(parent, "该学号已存在", "提示", JOptionPane.WARNING_MESSAGE);
-            }
-
-
+        if (name.equals("") || password.equals("") || speciality.equals("") || identityNumber.equals("")) {
+            JOptionPane.showMessageDialog(parent, "请将信息填写完整,名字,密码,专业,入学年份,身份证号不能为空", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+        if (!identityNumber.matches("(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx])$)")) {
+            JOptionPane.showMessageDialog(parent, "身份证号格式错误", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Stu stu = new Stu(name, password, birthday, speciality, entryYear, province, city, Stu.STUDENT, identityNumber);
+        if (stuService.checkIsExist(stu.getId()) == null) {
+            stuService.addStudent(stu);
+            if (parent.parentComponent instanceof StuInfoListJFrame) {
+                ((StuInfoListJFrame) parent.parentComponent).updateTable(StuInfoListJFrame.ADD, stu, null);
+            }
+            int result = JOptionPane.showConfirmDialog(parent, "成功添加" + stu + " " + "是否继续添加？", "提示", JOptionPane.YES_NO_OPTION);
+            // 检查用户的选择
+            if (result == JOptionPane.YES_OPTION) {
+                resetStuInfo(parent);
+            } else {
+                closeJFrame(parent);
+            }
+        } else {
+            JOptionPane.showMessageDialog(parent, "该学号已存在", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+
+
     }
 
     public static void resetStuInfo(AddStuJFrame parent) {
@@ -228,7 +234,7 @@ public class MouseClickFunction {
             if (result > 0) {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册成功");
                 MouseClickFunction.closeJFrame(bankRegisterJFrame);
-                BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"注册",new BigDecimal("0"),id,"null");
+                BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "注册", new BigDecimal("0"), id, "null");
                 bankService.addBankInfo(bankInfo);
             } else {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册失败", "提示", JOptionPane.WARNING_MESSAGE);
@@ -279,36 +285,37 @@ public class MouseClickFunction {
     }
 
     public static void deposit(DepositJFrame depositJFrame, BankService bankService) {
-        String cardNumber=depositJFrame.getCardNumberTextField().getText();
-        String password=new String(depositJFrame.getPasswordTextField().getPassword());
-        String amount=depositJFrame.getDepositAmountTextField().getText();
-        if(cardNumber.isEmpty()||password.isEmpty()||amount.isEmpty()){
-            JOptionPane.showMessageDialog(depositJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+        String cardNumber = depositJFrame.getCardNumberTextField().getText();
+        String password = new String(depositJFrame.getPasswordTextField().getPassword());
+        String amount = depositJFrame.getDepositAmountTextField().getText();
+        if (cardNumber.isEmpty() || password.isEmpty() || amount.isEmpty()) {
+            JOptionPane.showMessageDialog(depositJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!amount.matches("\\d+(\\.\\d{1,2})?")){
-            JOptionPane.showMessageDialog(depositJFrame,"请输入正确的金额","提示",JOptionPane.WARNING_MESSAGE);
+        if (!amount.matches("\\d+(\\.\\d{1,2})?")) {
+            JOptionPane.showMessageDialog(depositJFrame, "请输入正确的金额", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String cardOwnerId=bankService.getCardOwnerByCardNumber(cardNumber);
-        if (cardOwnerId==null){
-            JOptionPane.showMessageDialog(depositJFrame,"该卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+        String cardOwnerId = bankService.getCardOwnerByCardNumber(cardNumber);
+        if (cardOwnerId == null) {
+            JOptionPane.showMessageDialog(depositJFrame, "该卡号不存在", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!cardOwnerId.equals(Loginer.cardOwner.getId())){
-            JOptionPane.showMessageDialog(depositJFrame,"该卡号不属于您","提示",JOptionPane.WARNING_MESSAGE);
+        if (!cardOwnerId.equals(Loginer.cardOwner.getId())) {
+            JOptionPane.showMessageDialog(depositJFrame, "该卡号不属于您", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(password.equals(bankService.getCardPassword(cardNumber))){
-            bankService.deposit(cardNumber,amount);
-            JOptionPane.showMessageDialog(depositJFrame,"存款成功","提示",JOptionPane.INFORMATION_MESSAGE);
-            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"存款",new BigDecimal(amount),Loginer.cardOwner.getId(),cardNumber);
+        if (password.equals(bankService.getCardPassword(cardNumber))) {
+            bankService.deposit(cardNumber, amount);
+            JOptionPane.showMessageDialog(depositJFrame, "存款成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "存款", new BigDecimal(amount), Loginer.cardOwner.getId(), cardNumber);
             bankService.addBankInfo(bankInfo);
         }
     }
 
     public static void openAccount(OpenAccountJFrame openAccountJFrame, BankService bankService) {
-        String cardNumber="5463455545";//后续通过算法生成
+        String cardNumber = "5463455545";//后续通过算法生成
+        String type = openAccountJFrame.getCardTypeComboBox().getSelectedItem().toString();
         String id = openAccountJFrame.getOwnerIdTextField().getText();
         String password = new String(openAccountJFrame.getPasswordTextField().getPassword());
         String confirmPassword = new String(openAccountJFrame.getConfirmPasswordTextField().getPassword());
@@ -316,134 +323,140 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(openAccountJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (!password.equals(confirmPassword)){
+        if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(openAccountJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!bankService.isRegister(id)) {
             JOptionPane.showMessageDialog(openAccountJFrame, "该用户未注册", "提示", JOptionPane.WARNING_MESSAGE);
         }
-        if(!id.equals(Loginer.cardOwner.getId())){
-            JOptionPane.showMessageDialog(openAccountJFrame,"该身份证号不属于您,请本人来注册","提示",JOptionPane.WARNING_MESSAGE);
+        if (!id.equals(Loginer.cardOwner.getId())) {
+            JOptionPane.showMessageDialog(openAccountJFrame, "该身份证号不属于您,请本人来注册", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(bankService.openAccount(cardNumber,id,password)==1){{
-            JOptionPane.showMessageDialog(openAccountJFrame,"开户成功","提示",JOptionPane.INFORMATION_MESSAGE);
-            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"开户",new BigDecimal(0),id,cardNumber);
-            bankService.addBankInfo(bankInfo);
-        }}
-        else{
-            JOptionPane.showMessageDialog(openAccountJFrame,"开户失败","提示",JOptionPane.WARNING_MESSAGE);
+        if (bankService.openAccount(cardNumber, id, password, type, new BigDecimal("10000")) == 1) {
+            {
+                JOptionPane.showMessageDialog(openAccountJFrame, "开户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+                BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "开户", new BigDecimal(0), id, cardNumber);
+                bankService.addBankInfo(bankInfo);
+            }
+        } else {
+            JOptionPane.showMessageDialog(openAccountJFrame, "开户失败", "提示", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     public static void withdraw(WithdrawJFrame withdrawJFrame, BankService bankService) {
-        String cardNumber=withdrawJFrame.getCardNumberTextField().getText();
-        String password=new String(withdrawJFrame.getPasswordField().getPassword());
-        String amount=withdrawJFrame.getMoneyTextField().getText();
-        if(cardNumber.isEmpty()||password.isEmpty()||amount.isEmpty()){
-            JOptionPane.showMessageDialog(withdrawJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+        String cardNumber = withdrawJFrame.getCardNumberTextField().getText();
+        String password = new String(withdrawJFrame.getPasswordField().getPassword());
+        String amount = withdrawJFrame.getMoneyTextField().getText();
+        String type = bankService.getCardTypeByCardNumber(cardNumber);
+        if (cardNumber.isEmpty() || password.isEmpty() || amount.isEmpty()) {
+            JOptionPane.showMessageDialog(withdrawJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!amount.matches("\\d+(\\.\\d{1,2})?")){
-            JOptionPane.showMessageDialog(withdrawJFrame,"请输入正确的金额","提示",JOptionPane.WARNING_MESSAGE);
+        if (!amount.matches("\\d+(\\.\\d{1,2})?")) {
+            JOptionPane.showMessageDialog(withdrawJFrame, "请输入正确的金额", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String cardOwnerId=bankService.getCardOwnerByCardNumber(cardNumber);
-        if (cardOwnerId==null){
-            JOptionPane.showMessageDialog(withdrawJFrame,"该卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+        String cardOwnerId = bankService.getCardOwnerByCardNumber(cardNumber);
+        if (cardOwnerId == null) {
+            JOptionPane.showMessageDialog(withdrawJFrame, "该卡号不存在", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!cardOwnerId.equals(Loginer.cardOwner.getId())){
-            JOptionPane.showMessageDialog(withdrawJFrame,"该卡号不属于您","提示",JOptionPane.WARNING_MESSAGE);
+        if (!cardOwnerId.equals(Loginer.cardOwner.getId())) {
+            JOptionPane.showMessageDialog(withdrawJFrame, "该卡号不属于您", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(new BigDecimal(amount).compareTo(bankService.getCardBalance(cardNumber))>0 ) {
-            JOptionPane.showMessageDialog(withdrawJFrame,"余额不足","提示",JOptionPane.WARNING_MESSAGE);
+        BigDecimal cardBalance = bankService.getCardBalance(cardNumber);
+        if ((type.equals("借记卡") && new BigDecimal(amount).compareTo(cardBalance) > 0) || (type.equals("信用卡") && new BigDecimal(amount).compareTo(cardBalance.add(bankService.getCardLimitByCardNumber(cardNumber))) > 0)) {
+            JOptionPane.showMessageDialog(withdrawJFrame, "余额不足", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(password.equals(bankService.getCardPassword(cardNumber))){
-            bankService.withdraw(cardNumber,amount);
-            JOptionPane.showMessageDialog(withdrawJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
-            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"取款",new BigDecimal(amount),Loginer.cardOwner.getId(),cardNumber);
+
+        if (password.equals(bankService.getCardPassword(cardNumber))) {
+            bankService.withdraw(cardNumber, amount);
+            JOptionPane.showMessageDialog(withdrawJFrame, "取款成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "取款", new BigDecimal(amount), Loginer.cardOwner.getId(), cardNumber);
             bankService.addBankInfo(bankInfo);
         }
     }
 
     public static void transfer(TransferJFrame transferJFrame, BankService bankService) {
-        String payerCardNumber=transferJFrame.getPayerCardNumberTextField().getText();
-        String payeeCardNumber=transferJFrame.getPayeeCardNumberTextField().getText();
-        String payerPassword=new String(transferJFrame.getPayerPasswordField().getPassword());
-        String amount=transferJFrame.getAmountTextField().getText();
-        if(payerPassword.isEmpty()||amount.isEmpty()||payerCardNumber.isEmpty()||payeeCardNumber.isEmpty()){
-            JOptionPane.showMessageDialog(transferJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+        String payerCardNumber = transferJFrame.getPayerCardNumberTextField().getText();
+        String payeeCardNumber = transferJFrame.getPayeeCardNumberTextField().getText();
+        String payerPassword = new String(transferJFrame.getPayerPasswordField().getPassword());
+        String amount = transferJFrame.getAmountTextField().getText();
+        String type = bankService.getCardTypeByCardNumber(payerCardNumber);
+        if (payerPassword.isEmpty() || amount.isEmpty() || payerCardNumber.isEmpty() || payeeCardNumber.isEmpty()) {
+            JOptionPane.showMessageDialog(transferJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!amount.matches("\\d+(\\.\\d{1,2})?")){
-            JOptionPane.showMessageDialog(transferJFrame,"请输入正确的金额","提示",JOptionPane.WARNING_MESSAGE);
+        if (!amount.matches("\\d+(\\.\\d{1,2})?")) {
+            JOptionPane.showMessageDialog(transferJFrame, "请输入正确的金额", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(new BigDecimal(amount).compareTo(bankService.getCardBalance(payerCardNumber))>0){
-            JOptionPane.showMessageDialog(transferJFrame,"余额不足","提示",JOptionPane.WARNING_MESSAGE);
+        BigDecimal cardBalance = bankService.getCardBalance(payerCardNumber);
+        if ((type.equals("借记卡") && new BigDecimal(amount).compareTo(cardBalance) > 0) || (type.equals("信用卡") && new BigDecimal(amount).compareTo(cardBalance.add(bankService.getCardLimitByCardNumber(payerCardNumber))) > 0)) {
+            JOptionPane.showMessageDialog(transferJFrame, "余额不足", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(bankService.getCardOwnerByCardNumber(payerCardNumber)==null){
-            JOptionPane.showMessageDialog(transferJFrame,"付款卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+        if (bankService.getCardOwnerByCardNumber(payerCardNumber) == null) {
+            JOptionPane.showMessageDialog(transferJFrame, "付款卡号不存在", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(bankService.getCardOwnerByCardNumber(payeeCardNumber)==null){
-            JOptionPane.showMessageDialog(transferJFrame,"收款卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+        if (bankService.getCardOwnerByCardNumber(payeeCardNumber) == null) {
+            JOptionPane.showMessageDialog(transferJFrame, "收款卡号不存在", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!bankService.getCardOwnerByCardNumber(payerCardNumber).equals(Loginer.cardOwner.getId())){
-            JOptionPane.showMessageDialog(transferJFrame,"付款卡号不存在","提示",JOptionPane.WARNING_MESSAGE);
+        if (!bankService.getCardOwnerByCardNumber(payerCardNumber).equals(Loginer.cardOwner.getId())) {
+            JOptionPane.showMessageDialog(transferJFrame, "付款卡号不存在", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!payerPassword.equals(bankService.getCardPassword(payerCardNumber))){
-           JOptionPane.showMessageDialog(transferJFrame,"付款密码错误","提示",JOptionPane.WARNING_MESSAGE);
-           return;
+        if (!payerPassword.equals(bankService.getCardPassword(payerCardNumber))) {
+            JOptionPane.showMessageDialog(transferJFrame, "付款密码错误", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        bankService.transfer(payerCardNumber,payeeCardNumber,amount);
-        JOptionPane.showMessageDialog(transferJFrame,"转账成功","提示",JOptionPane.INFORMATION_MESSAGE);
-        BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"转账",new BigDecimal(amount),Loginer.cardOwner.getId(),payerCardNumber);
+        bankService.transfer(payerCardNumber, payeeCardNumber, amount);
+        JOptionPane.showMessageDialog(transferJFrame, "转账成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+        BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "转账", new BigDecimal(amount), Loginer.cardOwner.getId(), payerCardNumber);
         bankService.addBankInfo(bankInfo);
-        bankInfo=new BankInfo(LocalDateTime.now(),"收账",new BigDecimal(amount),bankService.getCardOwnerByCardNumber(payeeCardNumber),payeeCardNumber);
+        bankInfo = new BankInfo(LocalDateTime.now(), "收账", new BigDecimal(amount), bankService.getCardOwnerByCardNumber(payeeCardNumber), payeeCardNumber);
         bankService.addBankInfo(bankInfo);
     }
 
     public static void cancelAccount(CancelAccountJFrame cancelAccountJFrame, BankService bankService) {
 
         String cardNumber = cancelAccountJFrame.getCardNumberTextField().getText();
-        String id=cancelAccountJFrame.getOwnerIdTextField().getText();
+        String id = cancelAccountJFrame.getOwnerIdTextField().getText();
         String password = new String(cancelAccountJFrame.getPasswordTextField().getPassword());
         BigDecimal cardBalance = bankService.getCardBalance(cardNumber);
         if (cardNumber.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(cancelAccountJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!id.equals(Loginer.cardOwner.getId())){
+        if (!id.equals(Loginer.cardOwner.getId())) {
             JOptionPane.showMessageDialog(cancelAccountJFrame, "这不是你的卡,如确定要销户,请联系管理员", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(!password.equals(bankService.getCardPassword(cardNumber))){
+        if (!password.equals(bankService.getCardPassword(cardNumber))) {
             JOptionPane.showMessageDialog(cancelAccountJFrame, "密码错误", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if(cardBalance.compareTo(new BigDecimal(0))>0){
+        if (cardBalance.compareTo(new BigDecimal(0)) > 0) {
             JOptionPane.showMessageDialog(cancelAccountJFrame, "请先将余额清零", "提示", JOptionPane.WARNING_MESSAGE);
-            int result = JOptionPane.showConfirmDialog(cancelAccountJFrame, "是否以现金方式全部转出,共"+cardBalance);
-            if(result==JOptionPane.YES_OPTION){
-                bankService.withdraw(cardNumber,cardBalance.toString());
-                BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"取款",cardBalance,id,cardNumber);
-                JOptionPane.showMessageDialog(cancelAccountJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
-            }
-            else return;
+            int result = JOptionPane.showConfirmDialog(cancelAccountJFrame, "是否以现金方式全部转出,共" + cardBalance);
+            if (result == JOptionPane.YES_OPTION) {
+                bankService.withdraw(cardNumber, cardBalance.toString());
+                BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "取款", cardBalance, id, cardNumber);
+                bankService.addBankInfo(bankInfo);
+                JOptionPane.showMessageDialog(cancelAccountJFrame, "取款成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+            } else return;
         }
         int choice = JOptionPane.showConfirmDialog(cancelAccountJFrame, "请再次确认是否删除该卡号" + cardNumber);
-        if (choice == JOptionPane.YES_OPTION){
+        if (choice == JOptionPane.YES_OPTION) {
             bankService.cancelAccount(cardNumber);
             JOptionPane.showMessageDialog(cancelAccountJFrame, "销户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
-            BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"销户",new BigDecimal("0"),Loginer.cardOwner.getId(),cardNumber);
+            BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "销户", new BigDecimal("0"), Loginer.cardOwner.getId(), cardNumber);
             bankService.addBankInfo(bankInfo);
         }
 

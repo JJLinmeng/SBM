@@ -5,7 +5,7 @@
         INSERT INTO card_owner (id, name,password) VALUES (#{id},#{name}, #{password})
     </insert>
     <insert id="openAccount">
-        INSERT INTO debit_card (card_number, owner_id, balance, password) VALUES (#{cardNumber},#{id}, 0, #{password})
+        INSERT INTO debit_card (card_number, owner_id, balance, password,type,`limit`) VALUES (#{cardNumber},#{id}, 0, #{password},#{type},#{limit})
     </insert>
     <insert id="addBankInfo">
         INSERT INTO bank_info (time, type, amount,card_number,owner_id) VALUES (#{time}, #{type},#{amount},#{cardNumber},#{ownerId})
@@ -42,5 +42,11 @@
     </select>
     <select id="getBankInfosByOwnerId" resultType="com.mumu.studentbankmanagement.model.BankInfo">
         SELECT * FROM bank_info WHERE owner_id = #{id}
+    </select>
+    <select id="getCardTypeByCardNumber" resultType="java.lang.String">
+        SELECT type FROM debit_card WHERE card_number = #{cardNumber}
+    </select>
+    <select id="getCardLimitByCardNumber" resultType="java.math.BigDecimal">
+        SELECT `limit` FROM debit_card WHERE card_number = #{cardNumber}
     </select>
 </mapper>

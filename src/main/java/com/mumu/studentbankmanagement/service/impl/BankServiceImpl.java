@@ -9,7 +9,6 @@ import com.mumu.studentbankmanagement.service.BankService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -62,8 +61,8 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public int openAccount(String cardNumber, String id, String password) {
-        return bankMapper.openAccount(cardNumber, id, password);
+    public int openAccount(String cardNumber, String id, String password, String type, BigDecimal limit) {
+        return bankMapper.openAccount(cardNumber, id, password,type,limit);
     }
 
     @Override
@@ -96,6 +95,16 @@ public class BankServiceImpl implements BankService {
     @Override
     public List<BankInfo> getBankInfosByOwnerId(String id) {
         return bankMapper.getBankInfosByOwnerId(id);
+    }
+
+    @Override
+    public String getCardTypeByCardNumber(String cardNumber) {
+        return bankMapper.getCardTypeByCardNumber(cardNumber);
+    }
+
+    @Override
+    public BigDecimal getCardLimitByCardNumber(String cardNumber) {
+        return bankMapper.getCardLimitByCardNumber(cardNumber);
     }
 
 
