@@ -434,6 +434,7 @@ public class MouseClickFunction {
             int result = JOptionPane.showConfirmDialog(cancelAccountJFrame, "是否以现金方式全部转出,共"+cardBalance);
             if(result==JOptionPane.YES_OPTION){
                 bankService.withdraw(cardNumber,cardBalance.toString());
+                BankInfo bankInfo=new BankInfo(LocalDateTime.now(),"取款",cardBalance,id,cardNumber);
                 JOptionPane.showMessageDialog(cancelAccountJFrame,"取款成功","提示",JOptionPane.INFORMATION_MESSAGE);
             }
             else return;

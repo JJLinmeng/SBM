@@ -5,6 +5,7 @@ import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface BankService {
     CardOwner login(String stuId, String stuPwd);
@@ -34,4 +35,6 @@ public interface BankService {
     void cancelAccount(String cardNumber);
 
     void addBankInfo(BankInfo bankInfo);
+
+    List<BankInfo> getBankInfosByOwnerId(String id);
 }

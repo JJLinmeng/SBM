@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class BankServiceImpl implements BankService {
@@ -91,4 +92,11 @@ public class BankServiceImpl implements BankService {
     public void addBankInfo(BankInfo bankInfo) {
         bankMapper.addBankInfo(bankInfo);
     }
+
+    @Override
+    public List<BankInfo> getBankInfosByOwnerId(String id) {
+        return bankMapper.getBankInfosByOwnerId(id);
+    }
+
+
 }

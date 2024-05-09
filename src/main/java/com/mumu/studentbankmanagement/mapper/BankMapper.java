@@ -8,6 +8,7 @@ import org.springframework.jmx.export.annotation.ManagedNotification;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper
 @Repository
@@ -37,4 +38,6 @@ public interface BankMapper {
     void cancelAccount(String cardNumber);
 
     void addBankInfo(BankInfo bankInfo);
+
+    List<BankInfo> getBankInfosByOwnerId(String id);
 }

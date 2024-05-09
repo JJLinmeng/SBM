@@ -40,4 +40,7 @@
     <select id="getCardBalance" resultType="java.math.BigDecimal">
         SELECT balance FROM debit_card WHERE card_number = #{cardNumber}
     </select>
+    <select id="getBankInfosByOwnerId" resultType="com.mumu.studentbankmanagement.model.BankInfo">
+        SELECT * FROM bank_info WHERE owner_id = #{id}
+    </select>
 </mapper>
