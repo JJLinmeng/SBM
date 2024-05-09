@@ -12,4 +12,6 @@ public interface StuService {
     public List<Stu> getAllStudent();
     List<Stu> selectStuByCondition(Stu stu);
     void updateStu(Stu stu);
+
+    void addSpeciality(int id,String speciality);
 }

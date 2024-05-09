@@ -88,5 +88,12 @@ public class CardOwnerJFrame extends ConfigJFrame {
                      MouseClickFunction.openJFrame("LogInfoJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
             }
         });
+        logoutLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                MouseClickFunction.openJFrame("MenuJFrame", JFrame.DISPOSE_ON_CLOSE, CardOwnerJFrame.this);
+                MouseClickFunction.closeJFrame(CardOwnerJFrame.this);
+            }
+        });
     }
 }

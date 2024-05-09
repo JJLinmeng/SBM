@@ -13,4 +13,5 @@ public class Loader {
         ClassPathResource imgFile = new ClassPathResource(url);
         return Files.readAllBytes(imgFile.getFile().toPath());
     }
+
 }

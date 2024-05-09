@@ -14,13 +14,21 @@ import java.util.List;
 public class StuServiceImpl implements StuService {
     @Autowired
     private StuMapper stuMapper;
+
     @PostConstruct
-    public void init(){ConfigJFrame.set(this);}
-    @Override
-    public Stu login(String username, String password) {return stuMapper.findByIdAndPassword(username, password);}
+    public void init() {
+        ConfigJFrame.set(this);
+    }
 
     @Override
-    public void addStudent(Stu stu) {stuMapper.addStu(stu);}
+    public Stu login(String username, String password) {
+        return stuMapper.findByIdAndPassword(username, password);
+    }
+
+    @Override
+    public void addStudent(Stu stu) {
+        stuMapper.addStu(stu);
+    }
 
     @Override
     public int deleteStudent(String stuId) {
@@ -33,14 +41,23 @@ public class StuServiceImpl implements StuService {
     }
 
     @Override
-    public List<Stu> getAllStudent() {return stuMapper.getAllStudent();}
+    public List<Stu> getAllStudent() {
+        return stuMapper.getAllStudent();
+    }
 
     @Override
-    public List<Stu> selectStuByCondition(Stu stu) {return stuMapper.selectStuByCondition(stu);}
+    public List<Stu> selectStuByCondition(Stu stu) {
+        return stuMapper.selectStuByCondition(stu);
+    }
 
     @Override
     public void updateStu(Stu stu) {
         stuMapper.updateStu(stu);
+    }
+
+    @Override
+    public void addSpeciality(int id, String speciality) {
+        stuMapper.addSpeciality(id, speciality);
     }
 
 

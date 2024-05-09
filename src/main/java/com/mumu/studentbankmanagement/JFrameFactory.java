@@ -40,6 +40,7 @@ public class JFrameFactory {
             case "TransferJFrame" ->new TransferJFrame(closeWay,parentComponent).handle();
             case "CancelAccountJFrame" ->new CancelAccountJFrame(closeWay,parentComponent).handle();
             case "LogInfoJFrame"-> new LogInfoJFrame(closeWay,parentComponent).handle();
+            case "TestJFrame"->new TestJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

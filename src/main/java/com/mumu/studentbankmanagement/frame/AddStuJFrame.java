@@ -24,6 +24,9 @@ public class AddStuJFrame extends ConfigJFrame {
     protected JTextField entryYearTextField;
     private JLabel provinceCityLabel;
     protected ProvinceCitySelector provinceCitySelector;
+    private JLabel identityNumberLabel;
+    @Getter
+    private JTextField identityNumberTextField;
 
     private JButton confirmButton;
     private JButton resetButton;
@@ -54,6 +57,8 @@ public class AddStuJFrame extends ConfigJFrame {
         this.gridBagPanel.add(1, 4, 1, this.entryYearTextField = new JTextField(col));
         this.gridBagPanel.add(0, 5, 0.2, this.provinceCityLabel = new JLabel("户籍省市:"));
         this.gridBagPanel.add(1, 5, 1, this.provinceCitySelector = new ProvinceCitySelector());
+        this.gridBagPanel.add(0, 6, 0.2, this.identityNumberLabel = new JLabel("身份证号:"));
+        this.gridBagPanel.add(1, 6, 1, this.identityNumberTextField = new JTextField(col));
         this.buttonPanel.add(this.confirmButton = new JButton("确认"));
         this.buttonPanel.add(this.resetButton = new JButton("重置"));
         this.resetButton.addActionListener(e -> MouseClickFunction.resetStuInfo(this));
