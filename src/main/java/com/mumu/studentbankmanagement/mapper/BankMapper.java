@@ -1,5 +1,6 @@
 package com.mumu.studentbankmanagement.mapper;
 
+import com.mumu.studentbankmanagement.model.BankInfo;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 import org.apache.ibatis.annotations.Mapper;
@@ -34,4 +35,6 @@ public interface BankMapper {
     BigDecimal getCardBalance(String cardNumber);
 
     void cancelAccount(String cardNumber);
+
+    void addBankInfo(BankInfo bankInfo);
 }

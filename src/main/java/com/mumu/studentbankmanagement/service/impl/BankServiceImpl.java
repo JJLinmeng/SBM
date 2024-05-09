@@ -2,6 +2,7 @@ package com.mumu.studentbankmanagement.service.impl;
 
 import com.mumu.studentbankmanagement.frame.ConfigJFrame;
 import com.mumu.studentbankmanagement.mapper.BankMapper;
+import com.mumu.studentbankmanagement.model.BankInfo;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 import com.mumu.studentbankmanagement.service.BankService;
@@ -84,5 +85,10 @@ public class BankServiceImpl implements BankService {
     @Override
     public void cancelAccount(String cardNumber) {
         bankMapper.cancelAccount(cardNumber);
+    }
+
+    @Override
+    public void addBankInfo(BankInfo bankInfo) {
+        bankMapper.addBankInfo(bankInfo);
     }
 }

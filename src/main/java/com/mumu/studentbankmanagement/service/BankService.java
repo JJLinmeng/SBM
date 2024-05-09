@@ -1,5 +1,6 @@
 package com.mumu.studentbankmanagement.service;
 
+import com.mumu.studentbankmanagement.model.BankInfo;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 
@@ -31,4 +32,6 @@ public interface BankService {
     void transfer(String payerCardNumber, String payeeCardNumber, String amount);
 
     void cancelAccount(String cardNumber);
+
+    void addBankInfo(BankInfo bankInfo);
 }

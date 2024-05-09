@@ -7,6 +7,9 @@
     <insert id="openAccount">
         INSERT INTO debit_card (card_number, owner_id, balance, password) VALUES (#{cardNumber},#{id}, 0, #{password})
     </insert>
+    <insert id="addBankInfo">
+        INSERT INTO bank_info (time, type, amount,card_number,owner_id) VALUES (#{time}, #{type},#{amount},#{cardNumber},#{ownerId})
+    </insert>
     <update id="deposit">
         UPDATE debit_card SET balance = balance + #{amount} WHERE card_number = #{cardNumber}
     </update>
