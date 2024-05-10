@@ -15,6 +15,7 @@ import com.mumu.studentbankmanagement.service.BankService;
 import com.mumu.studentbankmanagement.service.StuService;
 
 import com.itextpdf.text.Image;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -51,6 +52,8 @@ public class MouseClickFunction {
         }
 
         Stu stu = new Stu(name, password, birthday, speciality, entryYear, province, city, Stu.STUDENT, identityNumber);
+        stu.setId(stuService.getSpecId(speciality)+entryYear+ StringUtils.leftPad(String.valueOf(stuService.getNumber(speciality,entryYear)+1),3,"0"));
+        System.out.println(stu.getId());
         if (stuService.checkIsExist(stu.getId()) == null) {
             stuService.addStudent(stu);
             if (parent.parentComponent instanceof StuInfoListJFrame) {

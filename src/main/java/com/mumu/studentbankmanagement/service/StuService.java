@@ -14,4 +14,8 @@ public interface StuService {
     void updateStu(Stu stu);
 
     void addSpeciality(int id,String speciality);
+
+    String getSpecId(String speciality);
+
+    Integer getNumber(String speciality, int entryYear);
 }

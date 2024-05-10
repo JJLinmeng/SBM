@@ -36,4 +36,10 @@
             </if>
         </where>
     </select>
+    <select id="getSpecId" resultType="java.lang.String">
+        SELECT id FROM speciality WHERE name = #{speciality}
+    </select>
+    <select id="getNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM stu WHERE entry_year = #{entryYear} AND speciality = #{speciality}
+    </select>
 </mapper>

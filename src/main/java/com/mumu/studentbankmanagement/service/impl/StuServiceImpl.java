@@ -60,5 +60,15 @@ public class StuServiceImpl implements StuService {
         stuMapper.addSpeciality(id, speciality);
     }
 
+    @Override
+    public String getSpecId(String speciality) {
+        return stuMapper.getSpecId(speciality);
+    }
+
+    @Override
+    public Integer getNumber(String speciality, int entryYear) {
+        return stuMapper.getNumber(speciality,entryYear);
+    }
+
 
 }
