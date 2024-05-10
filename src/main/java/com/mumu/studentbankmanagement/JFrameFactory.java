@@ -41,6 +41,9 @@ public class JFrameFactory {
             case "CancelAccountJFrame" ->new CancelAccountJFrame(closeWay,parentComponent).handle();
             case "LogInfoJFrame"-> new LogInfoJFrame(closeWay,parentComponent).handle();
             case "TestJFrame"->new TestJFrame(closeWay,parentComponent).handle();
+            case "FinancialDepartmentJFrame" ->new FinancialDepartmentJFrame(closeWay,parentComponent).handle();
+            case "AddPayToOneJFrame"->new AddPayToOneJFrame(closeWay,parentComponent).handle();
+            case "AddPayToAllJFrame" -> new AddPayToAllJFrame(closeWay,parentComponent).handle();
             default -> System.out.println("Frame not found");
         }
     }

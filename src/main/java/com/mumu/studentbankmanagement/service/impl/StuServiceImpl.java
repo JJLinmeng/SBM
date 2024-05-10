@@ -60,5 +60,27 @@ public class StuServiceImpl implements StuService {
         stuMapper.addSpeciality(id, speciality);
     }
 
+    @Override
+    public String getSpecId(String speciality) {
+        return stuMapper.getSpecId(speciality);
+    }
+
+    @Override
+    public Integer getNumber(String speciality, int entryYear) {
+        return stuMapper.getNumber(speciality,entryYear);
+    }
+
+    @Override
+    public void setToBePaidToOne(String stuId, String amount) {
+        stuMapper.setToBePaidToOne(stuId, amount);
+    }
+
+    @Override
+    public void setToBePaidToAll(String amount) {
+        stuMapper.setToBePaidToAll(amount);
+    }
+
+
+
 
 }

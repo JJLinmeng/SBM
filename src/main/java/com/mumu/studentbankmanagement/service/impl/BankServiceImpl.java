@@ -107,5 +107,15 @@ public class BankServiceImpl implements BankService {
         return bankMapper.getCardLimitByCardNumber(cardNumber);
     }
 
+    @Override
+    public int getAllCardsCount() {
+        return bankMapper.getAllCardsCount();
+    }
+
+    @Override
+    public int loginByCardOwner(CardOwner cardOwner) {
+        return bankMapper.loginByCardOwner(cardOwner);
+    }
+
 
 }

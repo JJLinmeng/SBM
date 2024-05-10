@@ -10,6 +10,12 @@
     <update id="updateStu">
         UPDATE stu SET name = #{name},password = #{password},birthday = #{birthday},speciality = #{speciality},province = #{province},city = #{city},entry_year = #{entryYear} WHERE id = #{id}
     </update>
+    <update id="setToBePaidToOne">
+        UPDATE stu SET to_be_paid = to_be_paid+#{amount} WHERE id = #{id}
+    </update>
+    <update id="setToBePaidToAll">
+        UPDATE stu SET to_be_paid = to_be_paid+#{amount}
+    </update>
     <delete id="deleteStu">
         DELETE FROM stu WHERE id = #{id}
     </delete>
@@ -35,5 +41,11 @@
                 AND entry_year = #{entryYear}
             </if>
         </where>
+    </select>
+    <select id="getSpecId" resultType="java.lang.String">
+        SELECT id FROM speciality WHERE name = #{speciality}
+    </select>
+    <select id="getNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM stu WHERE entry_year = #{entryYear} AND speciality = #{speciality}
     </select>
 </mapper>

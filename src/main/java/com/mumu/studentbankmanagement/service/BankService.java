@@ -41,4 +41,8 @@ public interface BankService {
     String getCardTypeByCardNumber(String cardNumber);
 
     BigDecimal getCardLimitByCardNumber(String cardNumber);
+
+    int getAllCardsCount();
+
+    int loginByCardOwner(CardOwner cardOwner);
 }

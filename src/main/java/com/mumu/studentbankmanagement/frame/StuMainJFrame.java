@@ -73,7 +73,8 @@ public class StuMainJFrame extends ConfigJFrame {
         this.backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-
+                MouseClickFunction.closeJFrame(StuMainJFrame.this);
+                MouseClickFunction.openJFrame("MenuJFrame", JFrame.DISPOSE_ON_CLOSE, null);
             }
         });
     }

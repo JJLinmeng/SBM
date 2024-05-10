@@ -49,4 +49,10 @@
     <select id="getCardLimitByCardNumber" resultType="java.math.BigDecimal">
         SELECT `limit` FROM debit_card WHERE card_number = #{cardNumber}
     </select>
+    <select id="getAllCardsCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM debit_card
+    </select>
+    <select id="loginByCardOwner" resultType="java.lang.Integer">
+        SELECT count(*) FROM card_owner WHERE id = #{id} AND password = #{password} AND name=#{name}
+    </select>
 </mapper>

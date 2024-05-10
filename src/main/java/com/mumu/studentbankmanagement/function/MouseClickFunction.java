@@ -15,6 +15,7 @@ import com.mumu.studentbankmanagement.service.BankService;
 import com.mumu.studentbankmanagement.service.StuService;
 
 import com.itextpdf.text.Image;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -22,12 +23,15 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Random;
 
 public class MouseClickFunction {
 
@@ -51,6 +55,8 @@ public class MouseClickFunction {
         }
 
         Stu stu = new Stu(name, password, birthday, speciality, entryYear, province, city, Stu.STUDENT, identityNumber);
+        stu.setId(stuService.getSpecId(speciality) + entryYear + StringUtils.leftPad(String.valueOf(stuService.getNumber(speciality, entryYear) + 1), 3, "0"));
+        System.out.println(stu.getId());
         if (stuService.checkIsExist(stu.getId()) == null) {
             stuService.addStudent(stu);
             if (parent.parentComponent instanceof StuInfoListJFrame) {
@@ -83,10 +89,22 @@ public class MouseClickFunction {
         parent.setVisible(false);
     }
 
-    public static void checkIsLogin(StuLoginJFrame parent, StuService userService) {
+    public static void checkIsLogin(StuLoginJFrame parent, StuService userService,BankService bankService) {
         String stuId = parent.getStuIdTextField().getText();
         String stuPwd = new String(parent.getStuPasswordTextField().getPassword());
-        try {
+        ButtonGroup group = parent.getRoleGroup();
+        String role = "";
+        for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements(); ) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                role = button.getText();
+            }
+        }
+        if (role.equals("")) {
+            JOptionPane.showMessageDialog(parent, "请选择角色", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (role.equals("学生")) {
             Stu user = userService.login(stuId, stuPwd);
             if (user != null) {
                 //登录成功
@@ -94,13 +112,31 @@ public class MouseClickFunction {
                 parent.setVisible(false);
                 parent.getParentComponent().setVisible(false);
                 Loginer.user = user;
-                MouseClickFunction.openJFrame("StuMainJFrame", JFrame.EXIT_ON_CLOSE, parent);
-            } else {
+                if (user.getRole() == Stu.STUDENT) {
+                    MouseClickFunction.openJFrame("StuPersonalCenterJFrame", JFrame.EXIT_ON_CLOSE, parent);
+                } else if (user.getRole() == Stu.ADMIN) {
+                    MouseClickFunction.openJFrame("StuMainJFrame", JFrame.EXIT_ON_CLOSE, parent);
+                }else {
+                    //登录失败
+                    JOptionPane.showMessageDialog(parent, "登录失败");
+                }
+
+            }
+        }
+        else if (role.equals("财务部")) {
+            CardOwner cardOwner=new CardOwner(stuId,"南京工程学院财务部",stuPwd);
+            if (bankService.loginByCardOwner(cardOwner)>0) {
+                JOptionPane.showMessageDialog(parent, "登录成功");
+                parent.setVisible(false);
+                parent.getParentComponent().setVisible(false);
+                Loginer.cardOwner = cardOwner;
+                MouseClickFunction.openJFrame("FinancialDepartmentJFrame", JFrame.EXIT_ON_CLOSE, parent);
+            }
+            else {
                 //登录失败
                 JOptionPane.showMessageDialog(parent, "登录失败");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
         }
     }
 
@@ -230,6 +266,10 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "请输入姓名", "提示", JOptionPane.WARNING_MESSAGE);
         } else {
             CardOwner cardOwner = new CardOwner(id, name, password);
+            if (!bankService.isRegister(id)) {
+                JOptionPane.showMessageDialog(bankRegisterJFrame, "该身份证号已注册", "提示", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             int result = bankService.registerCardOwner(cardOwner);
             if (result > 0) {
                 JOptionPane.showMessageDialog(bankRegisterJFrame, "注册成功");
@@ -313,9 +353,58 @@ public class MouseClickFunction {
         }
     }
 
+    public static String generatePin(BankService bankService) {
+        String pin;
+        BigInteger add = new BigInteger(String.valueOf(bankService.getAllCardsCount())).add(new BigInteger("456324896414")).remainder(new BigInteger("1000000000001"));
+        pin = add.toString();
+        return pin;
+    }
+
+    public static String generateBin() {
+        return "650327";
+    }
+
+    public static String generateType(String type) {
+        Random random = new Random();
+        int randomNumber;
+        if ("借记卡".equals(type)) {
+            do {
+                randomNumber = random.nextInt(10);
+            } while (randomNumber % 2 == 0);
+        } else {
+            do {
+                randomNumber = random.nextInt(10);
+            } while (randomNumber % 2 != 0);
+        }
+        return String.valueOf(randomNumber);
+    }
+
+    public static String generateCheckNumber(String bin, String pin, String generateType) {
+        int num = 0;
+        for (int i = 0; i < bin.length(); i++) {
+            num += bin.charAt(i) - '0';
+        }
+        for (int i = 0; i < pin.length(); i++) {
+            num += pin.charAt(i) - '0';
+        }
+        for (int i = 0; i < generateType.length(); i++) {
+            num += generateType.charAt(i) - '0';
+        }
+        return String.valueOf(num % 10);
+    }
+
+    public static String generateCardNumber(BankService bankService, String type) {
+        String bin = generateBin();
+        String pin = generatePin(bankService);
+        String generateType = generateType(type);
+        String checkNumber = generateCheckNumber(bin, pin, generateType);
+        return bin + pin + generateType + checkNumber;
+    }
+
     public static void openAccount(OpenAccountJFrame openAccountJFrame, BankService bankService) {
-        String cardNumber = "5463455545";//后续通过算法生成
+        String pin = generatePin(bankService);
         String type = openAccountJFrame.getCardTypeComboBox().getSelectedItem().toString();
+        String cardNumber = generateCardNumber(bankService, type);
         String id = openAccountJFrame.getOwnerIdTextField().getText();
         String password = new String(openAccountJFrame.getPasswordTextField().getPassword());
         String confirmPassword = new String(openAccountJFrame.getConfirmPasswordTextField().getPassword());
@@ -334,12 +423,16 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(openAccountJFrame, "该身份证号不属于您,请本人来注册", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (bankService.openAccount(cardNumber, id, password, type, new BigDecimal("10000")) == 1) {
-            {
-                JOptionPane.showMessageDialog(openAccountJFrame, "开户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
-                BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "开户", new BigDecimal(0), id, cardNumber);
-                bankService.addBankInfo(bankInfo);
-            }
+        int res = 0;
+        if (type.equals("借记卡")) {
+            res = bankService.openAccount(cardNumber, id, password, type, new BigDecimal("0"));
+        } else {
+            res = bankService.openAccount(cardNumber, id, password, type, new BigDecimal("10000"));
+        }
+        if (res == 1) {
+            JOptionPane.showMessageDialog(openAccountJFrame, "开户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+            BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "开户", new BigDecimal(0), id, cardNumber);
+            bankService.addBankInfo(bankInfo);
         } else {
             JOptionPane.showMessageDialog(openAccountJFrame, "开户失败", "提示", JOptionPane.WARNING_MESSAGE);
         }
@@ -463,6 +556,40 @@ public class MouseClickFunction {
 
     }
 
+    public static void setPayToOne(AddPayToOneJFrame addPayToOneJFrame,StuService stuService) {
+        String stuId=addPayToOneJFrame.getIdTextField().getText();
+        String amount=addPayToOneJFrame.getMoneyTextField().getText();
+        if (!amount.matches("\\d+(\\.\\d{1,2})?")) {
+            JOptionPane.showMessageDialog(addPayToOneJFrame, "请输入正确的金额", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(stuId.isEmpty()||amount.isEmpty()){
+            JOptionPane.showMessageDialog(addPayToOneJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(stuService.checkIsExist(stuId)==null){
+            JOptionPane.showMessageDialog(addPayToOneJFrame,"该学生不存在","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        stuService.setToBePaidToOne(stuId,amount);
+        JOptionPane.showMessageDialog(addPayToOneJFrame,"设置成功","提示",JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    public static void setPayToAll(AddPayToAllJFrame addPayToAllJFrame, StuService stuService) {
+        String amount=addPayToAllJFrame.getMoneyTextField().getText();
+        if(amount.isEmpty()){
+            JOptionPane.showMessageDialog(addPayToAllJFrame,"请输入正确的信息","提示",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!amount.matches("\\d+(\\.\\d{1,2})?")) {
+            JOptionPane.showMessageDialog(addPayToAllJFrame, "请输入正确的金额", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        stuService.setToBePaidToAll(amount);
+        JOptionPane.showMessageDialog(addPayToAllJFrame,"设置成功","提示",JOptionPane.INFORMATION_MESSAGE);
+
+    }
 }
 
 

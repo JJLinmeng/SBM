@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 public interface BankMapper {
     CardOwner login(String id, String password);
+    int  loginByCardOwner(CardOwner cardOwner);
 
     int registerCardOwner(CardOwner cardOwner);
 
@@ -44,4 +45,6 @@ public interface BankMapper {
     String getCardTypeByCardNumber(String cardNumber);
 
     BigDecimal getCardLimitByCardNumber(String cardNumber);
+
+    int  getAllCardsCount();
 }
