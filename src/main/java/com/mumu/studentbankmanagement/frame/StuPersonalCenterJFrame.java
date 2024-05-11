@@ -49,7 +49,7 @@ public class StuPersonalCenterJFrame extends ConfigJFrame{
         this.backButton.addActionListener(e-> {
             MouseClickFunction.closeJFrame(this);
             if(Loginer.user.getRole()== Stu.STUDENT){
-                MouseClickFunction.openJFrame("StuMainJFrame",JFrame.DISPOSE_ON_CLOSE,parentComponent);
+                MouseClickFunction.openJFrame("MenuJFrame",JFrame.DISPOSE_ON_CLOSE,parentComponent);
             }
         });
     }
