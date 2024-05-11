@@ -3,6 +3,7 @@ package com.mumu.studentbankmanagement.frame;
 import com.mumu.studentbankmanagement.Loginer;
 import com.mumu.studentbankmanagement.component.GridBagPanel;
 import com.mumu.studentbankmanagement.function.MouseClickFunction;
+import com.mumu.studentbankmanagement.model.Stu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +46,12 @@ public class StuPersonalCenterJFrame extends ConfigJFrame{
         this.buttonPanel.add(this.toolsButton=new JButton("工具箱"),BorderLayout.EAST);
         this.toolsButton.addActionListener(e-> MouseClickFunction.openJFrame("StuToolsJFrame",JFrame.DISPOSE_ON_CLOSE,this));
         this.buttonPanel.add(this.backButton=new JButton("返回"),BorderLayout.SOUTH);
-        this.backButton.addActionListener(e-> MouseClickFunction.closeJFrame(this));
+        this.backButton.addActionListener(e-> {
+            MouseClickFunction.closeJFrame(this);
+            if(Loginer.user.getRole()== Stu.STUDENT){
+                MouseClickFunction.openJFrame("StuMainJFrame",JFrame.DISPOSE_ON_CLOSE,parentComponent);
+            }
+        });
     }
 
 }
