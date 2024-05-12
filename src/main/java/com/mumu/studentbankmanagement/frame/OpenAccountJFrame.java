@@ -21,6 +21,7 @@ public class OpenAccountJFrame extends ConfigJFrame{
     private JPasswordField confirmPasswordTextField;
     private JButton openAccountButton;
     private JButton backButton;
+    private JLabel cardTypeLabel;
     @Getter
     private JComboBox<String> cardTypeComboBox;
     public OpenAccountJFrame(int closeWay, JFrame parentComponent) {
@@ -38,7 +39,8 @@ public class OpenAccountJFrame extends ConfigJFrame{
         gridBagPanel.add(1,1,1,passwordTextField=new JPasswordField(18));
         gridBagPanel.add(0,2,0.2,confirmPasswordLabel=new JLabel("确认密码:"));
         gridBagPanel.add(1,2,1,confirmPasswordTextField=new JPasswordField(18));
-        gridBagPanel.add(0,3,0.2,cardTypeComboBox=new JComboBox<>(new String[]{"借记卡","信用卡"}));
+        gridBagPanel.add(0,3,0.2,cardTypeLabel=new JLabel("卡类型:"));
+        gridBagPanel.add(1,3,1,cardTypeComboBox=new JComboBox<>(new String[]{"借记卡","信用卡"}));
         buttonPanel.add(openAccountButton=new JButton("开户"));
         buttonPanel.add(backButton=new JButton("返回"));
         openAccountButton.addActionListener(e-> MouseClickFunction.openAccount(this,bankService));

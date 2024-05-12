@@ -698,7 +698,6 @@ public class MouseClickFunction {
         }
         stuService.setToBePaidToAll(amount);
         JOptionPane.showMessageDialog(addPayToAllJFrame, "设置成功", "提示", JOptionPane.INFORMATION_MESSAGE);
-
     }
 }
 

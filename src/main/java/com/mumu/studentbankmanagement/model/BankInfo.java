@@ -1,9 +1,12 @@
 package com.mumu.studentbankmanagement.model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,16 +24,28 @@ public class BankInfo {
         this.ownerId=ownerId;
         this.cardNumber=cardNumber;
     }
+
+    public String setDateFormat(LocalDateTime time){
+
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy年MM月dd日HH时mm分ss秒");
+
+
+        String formattedTime = time.format(dateTimeFormatter);
+
+       return formattedTime;
+    }
+
+
     public String toString(){
         if(type.equals("转账")||type.equals("取款")||type.equals("存款")||type.equals("收账")){
-            return "用户"+ownerId+",卡号"+cardNumber+type+amount+"元";
+            return setDateFormat(time)+" 用户"+ownerId+",卡号"+cardNumber+type+amount+"元";
         }
         if(type.equals("开户")||type.equals("销户")){
-            return "用户"+ownerId+",卡号"+cardNumber+type;
+            return setDateFormat(time)+" 用户"+ownerId+",卡号"+cardNumber+type;
         }
         if(type.equals("注册")){
-            return "用户"+ownerId+type;
+            return setDateFormat(time)+" 用户"+ownerId+type;
         }
-        else return type+"未标记";
+        else return setDateFormat(time)+type+" 未标记";
     }
 }
