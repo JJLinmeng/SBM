@@ -22,7 +22,7 @@ public class BankInfo {
         this.cardNumber=cardNumber;
     }
     public String toString(){
-        if(type.equals("转账")||type.equals("取款")||type.equals("存款")){
+        if(type.equals("转账")||type.equals("取款")||type.equals("存款")||type.equals("收账")){
             return "用户"+ownerId+",卡号"+cardNumber+type+amount+"元";
         }
         if(type.equals("开户")||type.equals("销户")){
@@ -31,6 +31,6 @@ public class BankInfo {
         if(type.equals("注册")){
             return "用户"+ownerId+type;
         }
-        return type+"未标记";
+        else return type+"未标记";
     }
 }

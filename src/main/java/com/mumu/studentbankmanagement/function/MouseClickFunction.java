@@ -4,6 +4,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.mumu.studentbankmanagement.Encryption;
 import com.mumu.studentbankmanagement.JFrameFactory;
 import com.mumu.studentbankmanagement.Loginer;
 import com.mumu.studentbankmanagement.Util.DateUtil;
@@ -37,7 +38,14 @@ public class MouseClickFunction {
 
     public static void addStudent(AddStuJFrame parent, StuService stuService) {
         String name = parent.getNameTextField().getText();
-        String password = new String(parent.getPasswordField().getPassword());
+        String password=null;
+        try{
+            password = Encryption.encrypt(new String(parent.getPasswordField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(parent, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         LocalDate birthday = parent.getBirthdayDatePicker().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         String speciality = parent.getSpecialityTextField().getText();
         int entryYear = Integer.parseInt(parent.getEntryYearTextField().getText());
@@ -91,7 +99,13 @@ public class MouseClickFunction {
 
     public static void checkIsLogin(StuLoginJFrame parent, StuService userService,BankService bankService) {
         String stuId = parent.getStuIdTextField().getText();
-        String stuPwd = new String(parent.getStuPasswordTextField().getPassword());
+        String stuPwd=null;
+        try{
+            stuPwd= Encryption.encrypt(new String(parent.getStuPasswordTextField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(parent, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         ButtonGroup group = parent.getRoleGroup();
         String role = "";
         for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements(); ) {
@@ -142,7 +156,13 @@ public class MouseClickFunction {
 
     public static void checkIsLogin(BankLoginJFrame parent, BankService userService) {
         String id = parent.getIdTextField().getText();
-        String password = new String(parent.getPasswordTextField().getPassword());
+        String password=null;
+        try{
+            password = Encryption.encrypt(new String(parent.getPasswordTextField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(parent, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         try {
             CardOwner cardOwner = userService.login(id, password);
             if (cardOwner != null) {
@@ -235,9 +255,17 @@ public class MouseClickFunction {
     }
 
     public static void modifyStuPassword(StuPasswordChangeJFrame stuPasswordChangeJFrame, StuService stuService) {
-        String oldPassword = new String(stuPasswordChangeJFrame.getOldPasswordField().getPassword());
-        String newPassword = new String(stuPasswordChangeJFrame.getNewPasswordField().getPassword());
-        String confirmPassword = new String(stuPasswordChangeJFrame.getConfirmPasswordField().getPassword());
+        String oldPassword=null;
+        String newPassword=null;
+        String confirmPassword=null;
+        try{
+            oldPassword = Encryption.encrypt(new String(stuPasswordChangeJFrame.getOldPasswordField().getPassword()));
+            newPassword = Encryption.encrypt(new String(stuPasswordChangeJFrame.getNewPasswordField().getPassword()));
+            confirmPassword = Encryption.encrypt(new String(stuPasswordChangeJFrame.getConfirmPasswordField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (!oldPassword.equals(Loginer.user.getPassword())) {
             JOptionPane.showMessageDialog(stuPasswordChangeJFrame, "原密码错误", "提示", JOptionPane.WARNING_MESSAGE);
         } else if (newPassword.equals(oldPassword)) {
@@ -255,9 +283,16 @@ public class MouseClickFunction {
 
     public static void registerCardOwner(BankRegisterJFrame bankRegisterJFrame, BankService bankService) {
         String id = bankRegisterJFrame.getIdTextField().getText();
-        String password = new String(bankRegisterJFrame.getPasswordField().getPassword());
+        String password=null;
+        String confirmPassword=null;
+        try{
+            password = Encryption.encrypt(new String(bankRegisterJFrame.getPasswordField().getPassword()));
+            confirmPassword = Encryption.encrypt(new String(bankRegisterJFrame.getPasswordConfirmField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(bankRegisterJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String name = bankRegisterJFrame.getNameTextField().getText();
-        String confirmPassword = new String(bankRegisterJFrame.getPasswordConfirmField().getPassword());
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(bankRegisterJFrame, "两次输入的密码不一致", "提示", JOptionPane.WARNING_MESSAGE);
         } else if (id.isEmpty()) {
@@ -326,7 +361,13 @@ public class MouseClickFunction {
 
     public static void deposit(DepositJFrame depositJFrame, BankService bankService) {
         String cardNumber = depositJFrame.getCardNumberTextField().getText();
-        String password = new String(depositJFrame.getPasswordTextField().getPassword());
+        String password=null;
+        try{
+            password = Encryption.encrypt(new String(depositJFrame.getPasswordTextField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(depositJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String amount = depositJFrame.getDepositAmountTextField().getText();
         if (cardNumber.isEmpty() || password.isEmpty() || amount.isEmpty()) {
             JOptionPane.showMessageDialog(depositJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
@@ -406,8 +447,15 @@ public class MouseClickFunction {
         String type = openAccountJFrame.getCardTypeComboBox().getSelectedItem().toString();
         String cardNumber = generateCardNumber(bankService, type);
         String id = openAccountJFrame.getOwnerIdTextField().getText();
-        String password = new String(openAccountJFrame.getPasswordTextField().getPassword());
-        String confirmPassword = new String(openAccountJFrame.getConfirmPasswordTextField().getPassword());
+        String password=null;
+        String confirmPassword = null;
+        try{
+            password = Encryption.encrypt(new String(openAccountJFrame.getPasswordTextField().getPassword()));
+            confirmPassword = Encryption.encrypt(new String(openAccountJFrame.getConfirmPasswordTextField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(openAccountJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (id.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             JOptionPane.showMessageDialog(openAccountJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
             return;
@@ -440,7 +488,14 @@ public class MouseClickFunction {
 
     public static void withdraw(WithdrawJFrame withdrawJFrame, BankService bankService) {
         String cardNumber = withdrawJFrame.getCardNumberTextField().getText();
-        String password = new String(withdrawJFrame.getPasswordField().getPassword());
+
+        String password=null;
+        try{
+            password = Encryption.encrypt(new String(withdrawJFrame.getPasswordField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(withdrawJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String amount = withdrawJFrame.getMoneyTextField().getText();
         String type = bankService.getCardTypeByCardNumber(cardNumber);
         if (cardNumber.isEmpty() || password.isEmpty() || amount.isEmpty()) {
@@ -477,7 +532,13 @@ public class MouseClickFunction {
     public static void transfer(TransferJFrame transferJFrame, BankService bankService) {
         String payerCardNumber = transferJFrame.getPayerCardNumberTextField().getText();
         String payeeCardNumber = transferJFrame.getPayeeCardNumberTextField().getText();
-        String payerPassword = new String(transferJFrame.getPayerPasswordField().getPassword());
+        String payerPassword=null;
+        try{
+            payerPassword = Encryption.encrypt(new String(transferJFrame.getPayerPasswordField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(transferJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String amount = transferJFrame.getAmountTextField().getText();
         String type = bankService.getCardTypeByCardNumber(payerCardNumber);
         if (payerPassword.isEmpty() || amount.isEmpty() || payerCardNumber.isEmpty() || payeeCardNumber.isEmpty()) {
@@ -521,7 +582,13 @@ public class MouseClickFunction {
 
         String cardNumber = cancelAccountJFrame.getCardNumberTextField().getText();
         String id = cancelAccountJFrame.getOwnerIdTextField().getText();
-        String password = new String(cancelAccountJFrame.getPasswordTextField().getPassword());
+        String password=null;
+        try{
+            password = Encryption.encrypt(new String(cancelAccountJFrame.getPasswordTextField().getPassword()));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(cancelAccountJFrame, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         BigDecimal cardBalance = bankService.getCardBalance(cardNumber);
         if (cardNumber.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(cancelAccountJFrame, "请输入正确的信息", "提示", JOptionPane.WARNING_MESSAGE);
