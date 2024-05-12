@@ -1,8 +1,8 @@
 package com.mumu.studentbankmanagement.frame;
 
 import com.mumu.studentbankmanagement.Loginer;
-import com.mumu.studentbankmanagement.component.GridBagPanel;
 import com.mumu.studentbankmanagement.function.MouseClickFunction;
+import com.mumu.studentbankmanagement.model.CardOwner;
 
 import javax.swing.*;
 import java.awt.*;

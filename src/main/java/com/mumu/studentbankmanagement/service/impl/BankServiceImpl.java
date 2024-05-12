@@ -3,6 +3,7 @@ package com.mumu.studentbankmanagement.service.impl;
 import com.mumu.studentbankmanagement.frame.ConfigJFrame;
 import com.mumu.studentbankmanagement.mapper.BankMapper;
 import com.mumu.studentbankmanagement.model.BankInfo;
+import com.mumu.studentbankmanagement.model.BankManager;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 import com.mumu.studentbankmanagement.service.BankService;
@@ -120,6 +121,16 @@ public class BankServiceImpl implements BankService {
     @Override
     public String getEmail(String cardNumber) {
         return bankMapper.getEmail(cardNumber);
+    }
+
+    @Override
+    public BankManager loginByBankManager(String id, String password) {
+        return bankMapper.loginByBankManager(id,password);
+    }
+
+    @Override
+    public List<CardOwner> getAllCardsOwner() {
+        return bankMapper.getAllCardsOwner();
     }
 
 

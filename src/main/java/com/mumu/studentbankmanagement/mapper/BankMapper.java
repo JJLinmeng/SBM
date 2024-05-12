@@ -1,6 +1,7 @@
 package com.mumu.studentbankmanagement.mapper;
 
 import com.mumu.studentbankmanagement.model.BankInfo;
+import com.mumu.studentbankmanagement.model.BankManager;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 import org.apache.ibatis.annotations.Mapper;
@@ -49,4 +50,8 @@ public interface BankMapper {
     int  getAllCardsCount();
 
     String getEmail(String id);
+
+    BankManager loginByBankManager(String id, String password);
+
+    List<CardOwner> getAllCardsOwner();
 }

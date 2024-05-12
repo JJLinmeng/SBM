@@ -58,4 +58,10 @@
     <select id="getEmail" resultType="java.lang.String">
         SELECT email FROM card_owner WHERE id = #{id}
     </select>
+    <select id="loginByBankManager" resultType="com.mumu.studentbankmanagement.model.BankManager">
+        SELECT * FROM bank_manager WHERE id = #{id} AND password = #{password}
+    </select>
+    <select id="getAllCardsOwner" resultType="com.mumu.studentbankmanagement.model.CardOwner">
+        SELECT * FROM card_owner
+    </select>
 </mapper>

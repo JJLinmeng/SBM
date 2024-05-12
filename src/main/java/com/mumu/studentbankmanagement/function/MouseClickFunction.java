@@ -11,6 +11,7 @@ import com.mumu.studentbankmanagement.Mail;
 import com.mumu.studentbankmanagement.Util.DateUtil;
 import com.mumu.studentbankmanagement.frame.*;
 import com.mumu.studentbankmanagement.model.BankInfo;
+import com.mumu.studentbankmanagement.model.BankManager;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.Stu;
 import com.mumu.studentbankmanagement.service.BankService;
@@ -165,16 +166,27 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(parent, "请正确输入密码", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        CardOwner cardOwner = userService.login(id, password);
-        if (cardOwner != null) {
-            JOptionPane.showMessageDialog(parent, "登录成功");
-            parent.setVisible(false);
-            parent.getParentComponent().setVisible(false);
-            Loginer.cardOwner = cardOwner;
-            MouseClickFunction.openJFrame("CardOwnerJFrame", JFrame.EXIT_ON_CLOSE, parent);
-        } else {
-            JOptionPane.showMessageDialog(parent, "登录失败");
+        if (id.equals("810327")) {
+            BankManager bankManager=userService.loginByBankManager(id,password);
+            if(bankManager!=null){
+                JOptionPane.showMessageDialog(parent, "登录成功");
+                parent.setVisible(false);
+                parent.getParentComponent().setVisible(false);
+                Loginer.bankManager=bankManager;
+                MouseClickFunction.openJFrame("BankManagerJFrame", JFrame.EXIT_ON_CLOSE, parent);
+            }
+        }
+        else {
+            CardOwner cardOwner = userService.login(id, password);
+            if (cardOwner != null) {
+                JOptionPane.showMessageDialog(parent, "登录成功");
+                parent.setVisible(false);
+                parent.getParentComponent().setVisible(false);
+                Loginer.cardOwner = cardOwner;
+                MouseClickFunction.openJFrame("CardOwnerJFrame", JFrame.EXIT_ON_CLOSE, parent);
+            } else {
+                JOptionPane.showMessageDialog(parent, "登录失败");
+            }
         }
     }
 
@@ -222,6 +234,9 @@ public class MouseClickFunction {
 
     public static void openJFrame(String frame, int closeway, JFrame parent, Stu stu) {
         JFrameFactory.create(frame, closeway, parent, stu);
+    }
+    public static void openJFrame(String frame, int closeway, JFrame parent,CardOwner cardOwner) {
+        JFrameFactory.create(frame, closeway, parent, cardOwner);
     }
 
     public static void openJFrame(String frame, int closeway, JFrame parent) {

@@ -15,4 +15,7 @@ public class CardOwner {
     private String id;
     private String name;
     private String password;
+    public String toString(){
+        return this.getId()+" "+this.getName();
+    }
 }

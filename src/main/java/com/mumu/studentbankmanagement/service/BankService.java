@@ -1,6 +1,7 @@
 package com.mumu.studentbankmanagement.service;
 
 import com.mumu.studentbankmanagement.model.BankInfo;
+import com.mumu.studentbankmanagement.model.BankManager;
 import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.DebitCard;
 
@@ -47,4 +48,8 @@ public interface BankService {
     int loginByCardOwner(CardOwner cardOwner);
 
     String getEmail(String cardNumber);
+
+    BankManager loginByBankManager(String id, String password);
+
+    List<CardOwner> getAllCardsOwner();
 }

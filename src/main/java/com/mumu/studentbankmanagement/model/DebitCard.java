@@ -11,10 +11,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DebitCard {
-    protected String cardNumber;
-    protected String ownerId;
-    protected BigDecimal balance;
-    protected String password;
-    private BigDecimal limit;
+   private String cardNumber;
+   private String ownerId;
+   private BigDecimal balance;
+   private String password;
+   private BigDecimal limit;
+   public String toString(){
+       return cardNumber+" "+ownerId+" "+balance+(limit.compareTo(new BigDecimal("0"))==0?"借记卡":"信用卡");
+   }
 
 }

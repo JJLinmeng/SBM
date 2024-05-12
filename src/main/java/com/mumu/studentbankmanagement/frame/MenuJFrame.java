@@ -20,6 +20,7 @@ public class MenuJFrame extends ConfigJFrame {
     public void init() {
         Loginer.cardOwner=null;
         Loginer.user=null;
+        Loginer.bankManager=null;
         // 使用FlowLayout布局
         this.setLayout(new FlowLayout());
         // 初始化学生系统按钮和银行系统按钮

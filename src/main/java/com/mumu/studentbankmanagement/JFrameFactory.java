@@ -1,9 +1,8 @@
 package com.mumu.studentbankmanagement;
 
 import com.mumu.studentbankmanagement.frame.*;
+import com.mumu.studentbankmanagement.model.CardOwner;
 import com.mumu.studentbankmanagement.model.Stu;
-import org.apache.ibatis.annotations.Case;
-import org.apache.ibatis.javassist.compiler.ast.NewExpr;
 
 import javax.swing.*;
 
@@ -14,6 +13,11 @@ public class JFrameFactory {
             case "StuInfoJFrame" ->new StuInfoJFrame(closeWay,parentComponent,stu).handle();
             case "UpdateStuJFrame" -> new UpdateStuJFrame(closeWay,parentComponent,stu).handle();
             default -> System.out.println("Frame not found");
+        }
+    }
+    public static void create(String frameName, int closeWay, JFrame parentComponent, CardOwner cardOwner) {
+        switch (frameName){
+            case "OwnerCardsJFrame" ->new OwnerCardsJFrame(closeWay,parentComponent,cardOwner).handle();
         }
     }
     public static void create(String frameName, int closeWay, JFrame parentComponent) {
@@ -44,6 +48,9 @@ public class JFrameFactory {
             case "FinancialDepartmentJFrame" ->new FinancialDepartmentJFrame(closeWay,parentComponent).handle();
             case "AddPayToOneJFrame"->new AddPayToOneJFrame(closeWay,parentComponent).handle();
             case "AddPayToAllJFrame" -> new AddPayToAllJFrame(closeWay,parentComponent).handle();
+            case "BankManagerJFrame" ->new BankManagerJFrame(closeWay,parentComponent).handle();
+            case "OwnerInfoJFrame"->new OwnerInfoJFrame(closeWay,parentComponent).handle();
+
             default -> System.out.println("Frame not found");
         }
     }
