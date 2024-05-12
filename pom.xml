@@ -17,7 +17,11 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
-
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
             <artifactId>swingx</artifactId>

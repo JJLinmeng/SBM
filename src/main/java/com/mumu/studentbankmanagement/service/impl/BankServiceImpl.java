@@ -117,5 +117,10 @@ public class BankServiceImpl implements BankService {
         return bankMapper.loginByCardOwner(cardOwner);
     }
 
+    @Override
+    public String getEmail(String cardNumber) {
+        return bankMapper.getEmail(cardNumber);
+    }
+
 
 }

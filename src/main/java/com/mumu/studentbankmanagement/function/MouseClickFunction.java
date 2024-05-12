@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.mumu.studentbankmanagement.Encryption;
 import com.mumu.studentbankmanagement.JFrameFactory;
 import com.mumu.studentbankmanagement.Loginer;
+import com.mumu.studentbankmanagement.Mail;
 import com.mumu.studentbankmanagement.Util.DateUtil;
 import com.mumu.studentbankmanagement.frame.*;
 import com.mumu.studentbankmanagement.model.BankInfo;
@@ -391,6 +392,10 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(depositJFrame, "存款成功", "提示", JOptionPane.INFORMATION_MESSAGE);
             BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "存款", new BigDecimal(amount), Loginer.cardOwner.getId(), cardNumber);
             bankService.addBankInfo(bankInfo);
+            String email=bankService.getEmail(cardOwnerId);
+            if(email!=null){
+                Mail.sendMail(email,"存款成功","您卡号"+cardNumber+"已成功存款"+amount+"元");
+            }
         }
     }
 
@@ -481,6 +486,10 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(openAccountJFrame, "开户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
             BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "开户", new BigDecimal(0), id, cardNumber);
             bankService.addBankInfo(bankInfo);
+            String email=bankService.getEmail(id);
+            if(email!=null){
+                Mail.sendMail(email,"开卡成功","您卡号"+cardNumber+"已成功开卡");
+            }
         } else {
             JOptionPane.showMessageDialog(openAccountJFrame, "开户失败", "提示", JOptionPane.WARNING_MESSAGE);
         }
@@ -526,6 +535,10 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(withdrawJFrame, "取款成功", "提示", JOptionPane.INFORMATION_MESSAGE);
             BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "取款", new BigDecimal(amount), Loginer.cardOwner.getId(), cardNumber);
             bankService.addBankInfo(bankInfo);
+            String email=bankService.getEmail(cardOwnerId);
+            if(email!=null){
+                Mail.sendMail(email,"取款成功","您卡号"+cardNumber+"已成功取款"+amount+"元");
+            }
         }
     }
 
@@ -576,6 +589,14 @@ public class MouseClickFunction {
         bankService.addBankInfo(bankInfo);
         bankInfo = new BankInfo(LocalDateTime.now(), "收账", new BigDecimal(amount), bankService.getCardOwnerByCardNumber(payeeCardNumber), payeeCardNumber);
         bankService.addBankInfo(bankInfo);
+        String payerEmail=bankService.getEmail(bankService.getCardOwnerByCardNumber(payerCardNumber));
+        if(payerEmail!=null){
+            Mail.sendMail(payerEmail,"转账成功","您卡号"+payerCardNumber+"已成功转账"+amount+"元");
+        }
+        String payeeEmail=bankService.getEmail(bankService.getCardOwnerByCardNumber(payeeCardNumber));
+        if(payeeEmail!=null){
+            Mail.sendMail(payeeEmail,"收账成功","您卡号"+payeeCardNumber+"已成功收账"+amount+"元");
+        }
     }
 
     public static void cancelAccount(CancelAccountJFrame cancelAccountJFrame, BankService bankService) {
@@ -618,6 +639,10 @@ public class MouseClickFunction {
             JOptionPane.showMessageDialog(cancelAccountJFrame, "销户成功", "提示", JOptionPane.INFORMATION_MESSAGE);
             BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "销户", new BigDecimal("0"), Loginer.cardOwner.getId(), cardNumber);
             bankService.addBankInfo(bankInfo);
+            String email=bankService.getEmail(id);
+            if(email!=null){
+                Mail.sendMail(email,"销卡成功","您卡号"+cardNumber+"已成功销卡");
+            }
         }
 
 

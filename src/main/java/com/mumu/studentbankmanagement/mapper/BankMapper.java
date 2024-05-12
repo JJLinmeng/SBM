@@ -47,4 +47,6 @@ public interface BankMapper {
     BigDecimal getCardLimitByCardNumber(String cardNumber);
 
     int  getAllCardsCount();
+
+    String getEmail(String id);
 }

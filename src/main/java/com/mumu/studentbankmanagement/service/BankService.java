@@ -45,4 +45,6 @@ public interface BankService {
     int getAllCardsCount();
 
     int loginByCardOwner(CardOwner cardOwner);
+
+    String getEmail(String cardNumber);
 }

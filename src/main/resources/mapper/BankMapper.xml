@@ -55,4 +55,7 @@
     <select id="loginByCardOwner" resultType="java.lang.Integer">
         SELECT count(*) FROM card_owner WHERE id = #{id} AND password = #{password} AND name=#{name}
     </select>
+    <select id="getEmail" resultType="java.lang.String">
+        SELECT email FROM card_owner WHERE id = #{id}
+    </select>
 </mapper>
