@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -423,7 +424,7 @@ public class MouseClickFunction {
         if (password.equals(bankService.getCardPassword(cardNumber))) {
             bankService.deposit(cardNumber, amount);
             JOptionPane.showMessageDialog(depositJFrame, "存款成功", "提示", JOptionPane.INFORMATION_MESSAGE);
-            BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "存款", new BigDecimal(amount), Loginer.cardOwner.getId(), cardNumber);
+            BankInfo bankInfo = new BankInfo(LocalDateTime.now(), "存款", new BigDecimal(amount), Loginer.cardOwner.getId(), cardNumber,bankService.getCardBalance(cardNumber));
             bankService.addBankInfo(bankInfo);
             String email = bankService.getEmail(cardOwnerId);
             if (email != null) {
@@ -445,6 +446,7 @@ public class MouseClickFunction {
 
     public static String generateType(String type) {
         Random random = new Random();
+        ArrayList<Integer> arrayList=new ArrayList<>();
         int randomNumber;
         if ("借记卡".equals(type)) {
             do {

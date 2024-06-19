@@ -8,7 +8,22 @@
         INSERT INTO debit_card (card_number, owner_id, balance, password,type,`limit`) VALUES (#{cardNumber},#{id}, 0, #{password},#{type},#{limit})
     </insert>
     <insert id="addBankInfo">
-        INSERT INTO bank_info (time, type, amount,card_number,owner_id) VALUES (#{time}, #{type},#{amount},#{cardNumber},#{ownerId})
+        INSERT INTO bank_info (time, type, amount,card_number,owner_id,balance) VALUES (#{time}, #{type},#{amount},#{cardNumber},#{ownerId},#{balance})
+    </insert>
+    <insert id="register">
+        INSERT INTO card_owner (id, name,password,email,role) VALUES (#{id},#{name}, #{password},#{email},#{role})
+    </insert>
+    <insert id="addCard">
+        INSERT INTO card (number, owner_id, password,type,level) VALUES (#{number},#{ownerId},  #{password},#{type},#{level})
+    </insert>
+    <insert id="insertVerificationCode">
+        INSERT INTO email_code (email,code) VALUES (#{email},#{code})
+    </insert>
+    <insert id="applyCreditCard">
+        INSERT INTO applying_card (card_owner_id,card_password,card_owner_name,apply_time,status) VALUES (#{id},#{password},#{name},#{time},#{status})
+    </insert>
+    <insert id="applyLoan">
+        INSERT INTO applying_loan (card_owner_id,card_owner_name,loan_amount,loan_month,loan_type,repay_card_number,loan_card_number,status) VALUES (#{id},#{name},#{loanAmount},#{loanMonth},#{loanType},#{repayCardNumber},#{loanCardNumber},#{status})
     </insert>
     <update id="deposit">
         UPDATE debit_card SET balance = balance + #{amount} WHERE card_number = #{cardNumber}
@@ -16,11 +31,55 @@
     <update id="withdraw">
         UPDATE debit_card SET balance = balance - #{amount} WHERE card_number = #{cardNumber}
     </update>
+    <update id="updateLastLoginTime">
+        UPDATE card_owner SET last_login = #{time} WHERE id = #{id}
+    </update>
+    <update id="withdrawCard">
+        UPDATE card SET balance = balance - #{amount} WHERE number = #{cardNumber}
+    </update>
+    <update id="depositCard">
+        UPDATE card SET balance = balance + #{amount} WHERE number = #{cardNumber}
+    </update>
+    <update id="markDeposit">
+        UPDATE card SET balance=balance +#{amount} WHERE number=#{cardNumber}
+    </update>
+    <update id="markDraw">
+        UPDATE card SET balance=balance -#{amount} WHERE number=#{cardNumber}
+    </update>
+    <update id="updateVerificationCode">
+        UPDATE email_code SET code = #{code} WHERE email = #{email}
+    </update>
+    <update id="uploadAvatar">
+        UPDATE card_owner SET avatar = #{image} WHERE id = #{id}
+    </update>
+    <update id="modifyApplyCreditInfo">
+        UPDATE applying_card SET status = #{status} WHERE card_owner_id = #{id}
+    </update>
+    <update id="agreeApplyLoan">
+        UPDATE card SET balance=balance+#{loanAmount},loan_amount=#{loanAmount},current_loan=#{loanAmount},all_month=#{loanMonth},loan_time=#{loanTime},current_loan=#{currentLoan},current_month_to_be_paid=#{currentToBePaidMoney},next_pay_time=#{nextPayTime},loan_type=#{loanType},repayment_card_number=#{repayCardNumber} ,interest_rate=#{interestRate} WHERE number=#{loanCardNumber}
+    </update>
+    <update id="modifyApplyLoanInfo">
+        UPDATE applying_loan SET status = #{status} WHERE loan_card_number = #{loanCardNumber}
+    </update>
+    <update id="modifyIsReminded">
+        UPDATE card SET is_reminded = #{isReminded} WHERE number = #{number}
+    </update>
+    <update id="modifyCreditCardInfo">
+        UPDATE card SET current_month_to_be_paid=#{currentMonthToBePaid} , next_pay_time=#{nextPayTime} , is_reminded=#{isReminded} , current_period=#{currentPeriod} WHERE number = #{number}
+    </update>
+
     <delete id="cancelAccount">
         DELETE FROM debit_card WHERE card_number = #{cardNumber}
     </delete>
+    <delete id="deleteCreditCardApplyInfo">
+        DELETE FROM applying_card WHERE card_owner_id = #{id}
+    </delete>
+    <delete id="deleteApplyLoanInfo">
+        DELETE FROM applying_loan WHERE card_owner_id = #{id}
+    </delete>
+
     <select id="login" resultType="CardOwner">
-        SELECT * FROM card_owner WHERE id = #{id} AND password = #{password}
+        SELECT * FROM card_owner WHERE id = #{id} AND password = #{password} AND role = 2
     </select>
     <select id="getCardNumber" resultType="java.lang.Integer">
         SELECT count(*) FROM debit_card WHERE owner_id = #{id}
@@ -63,5 +122,105 @@
     </select>
     <select id="getAllCardsOwner" resultType="com.mumu.studentbankmanagement.model.CardOwner">
         SELECT * FROM card_owner
+    </select>
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT count(*) FROM card_owner WHERE id = #{id}
+    </select>
+    <select id="getCardList" resultType="com.mumu.studentbankmanagement.model.Card">
+        SELECT * FROM card WHERE owner_id = #{id}
+    </select>
+    <select id="getUserInfo" resultType="com.mumu.studentbankmanagement.model.CardOwner">
+        SELECT * FROM card_owner WHERE id = #{id}
+    </select>
+    <select id="getCardDetails" resultType="com.mumu.studentbankmanagement.model.BankInfo">
+        SELECT *
+        FROM bank_info
+        WHERE card_number = #{registeredAccount}
+        <if test="start != null and start != ''">
+            AND time &gt;= #{start}
+        </if>
+        <if test="end != null and end != ''">
+            AND time &lt;= #{end}
+        </if>
+        <if test="category != null and category !=''">
+            AND type=#{category}
+        </if>
+        ORDER BY time DESC
+    </select>
+    <select id="getCardName" resultType="java.lang.String">
+        SELECT co.name
+        FROM card c
+        JOIN card_owner co ON c.owner_id = co.id
+        WHERE c.number = #{cardNumber}
+    </select>
+    <select id="getCardPasswordByCardNumber" resultType="java.lang.String">
+        SELECT password FROM card WHERE number = #{cardNumber}
+    </select>
+    <select id="getEmailByCardNumber" resultType="java.lang.String">
+        SELECT email FROM card_owner WHERE id = (SELECT owner_id FROM card WHERE number = #{cardNumber})
+    </select>
+    <select id="getCardOwnerIdByCardNumber" resultType="java.lang.String">
+        SELECT owner_id FROM card WHERE number = #{cardNumber}
+    </select>
+    <select id="getCardBalanceByCardNumber" resultType="java.math.BigDecimal">
+        SELECT balance FROM card WHERE number = #{cardNumber}
+    </select>
+    <select id="isCardOwnerExist" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT * FROM card_owner WHERE id = #{id} AND name=#{name})
+    </select>
+    <select id="getCardOwnerPasswordByCardOwnerId" resultType="java.lang.String">
+        SELECT password FROM card_owner WHERE id = #{id}
+    </select>
+    <select id="getAllCardsCountFromCard" resultType="java.lang.String">
+        SELECT count(*) FROM card
+    </select>
+    <select id="getDetailCardLevelNumber" resultType="java.lang.Integer">
+        SELECT count(*) FROM card WHERE level = #{level} AND owner_id=#{id}
+    </select>
+    <select id="isEmailCodeExistEmail" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT * FROM email_code WHERE email = #{email} )
+    </select>
+    <select id="getVerificationCode" resultType="java.lang.String">
+        SELECT code FROM email_code WHERE email = #{email}
+    </select>
+    <select id="isCardNumberExist" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT * FROM card WHERE number = #{cardNumber})
+    </select>
+    <select id="getCreditCardCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM card WHERE type = '信用卡' AND owner_id = #{id}
+    </select>
+    <select id="getCreditCardApplyCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM applying_card WHERE card_owner_id = #{id}
+    </select>
+    <select id="loginAdmin" resultType="com.mumu.studentbankmanagement.model.CardOwner">
+        SELECT * FROM card_owner WHERE id = #{id} AND password = #{password} AND role=1
+    </select>
+    <select id="getApplyingCardInfo" resultType="com.mumu.studentbankmanagement.model.CreditCardApplyInfo">
+        SELECT * FROM applying_card where status="审核中"
+    </select>
+    <select id="getCreditCardApplicationProgress" resultType="java.lang.String">
+        SELECT status FROM applying_card WHERE card_owner_id = #{id}
+    </select>
+    <select id="getCreditCardNumber" resultType="java.lang.String">
+        SELECT number FROM card WHERE owner_id = #{id} AND type = '信用卡'
+    </select>
+    <select id="getRepayCardNumber" resultType="java.lang.String">
+        SELECT number FROM card WHERE owner_id = #{id} AND level=1
+    </select>
+    <select id="getLoanApplyCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM applying_loan WHERE card_owner_id = #{id} AND status="审核中"
+
+    </select>
+    <select id="getLoanApplicationProgress" resultType="java.lang.String">
+        SELECT status FROM applying_loan WHERE card_owner_id = #{id}
+    </select>
+    <select id="getApplyingLoanInfo" resultType="com.mumu.studentbankmanagement.model.LoanApplyInfo">
+        SELECT * FROM applying_loan WHERE status="审核中"
+    </select>
+    <select id="getNearPaidTimeCard" resultType="com.mumu.studentbankmanagement.model.Card">
+        SELECT * FROM card WHERE type='信用卡' AND is_reminded=false AND DATEDIFF(next_pay_time,#{currentTime}) &lt; #{days} AND current_month_to_be_paid >0
+    </select>
+    <select id="getOverPaidTimeCard" resultType="com.mumu.studentbankmanagement.model.Card">
+        SELECT * FROM card WHERE type='信用卡' AND DATEDIFF(next_pay_time,#{currentTime}) &lt; 0 AND current_loan &gt; 0
     </select>
 </mapper>

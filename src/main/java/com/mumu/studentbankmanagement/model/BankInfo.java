@@ -17,12 +17,22 @@ public class BankInfo {
     private BigDecimal amount;
     private String ownerId;
     private String cardNumber;
+    private BigDecimal balance;
     public BankInfo(LocalDateTime time,String type,BigDecimal amount,String ownerId,String cardNumber){
         this.time=time;
         this.type=type;
         this.amount=amount;
         this.ownerId=ownerId;
         this.cardNumber=cardNumber;
+
+    }
+    public BankInfo(LocalDateTime time,String type,BigDecimal amount,String ownerId,String cardNumber,BigDecimal balance){
+        this.time=time;
+        this.type=type;
+        this.amount=amount;
+        this.ownerId=ownerId;
+        this.cardNumber=cardNumber;
+        this.balance=balance;
     }
 
     public String setDateFormat(LocalDateTime time){

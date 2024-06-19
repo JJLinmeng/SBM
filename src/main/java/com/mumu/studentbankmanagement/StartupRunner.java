@@ -14,6 +14,11 @@ import javax.swing.*;
 @Component
 public class StartupRunner implements ApplicationRunner {
     @Override
-    public void run(ApplicationArguments args) throws Exception {JFrameFactory.create("MenuJFrame",JFrame.EXIT_ON_CLOSE,null);}
+    public void run(ApplicationArguments args) throws Exception {
+        JFrameFactory.create("MenuJFrame",JFrame.EXIT_ON_CLOSE,null);
+//        int a=0;
+//        a=a++;
+//        System.out.println(a);
+    }
 
 }

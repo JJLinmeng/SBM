@@ -8,6 +8,7 @@ import java.util.Properties;
 public class Mail {
     public static void sendMail(String toAddress,String subject,String content){
         try {
+
             final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
             //配置邮箱信息
@@ -43,8 +44,11 @@ public class Mail {
             message.saveChanges();
             //发送邮件
             Transport.send(message);
+            System.out.println("邮件发送成功");
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("邮件发送失败");
         }
+
     }
 }
